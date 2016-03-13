@@ -1,4 +1,4 @@
-/**
+ï»¿/**
  * Created by EIJI on 2014/1/3.
  */
 
@@ -13,7 +13,7 @@
             dateNative.getDate()
         );
 
-    // ¸É0¨ç¦¡
+    // è£œ0å‡½å¼
     var padLeft = function(str, len){
         if(str.length >= len){
             return str;
@@ -23,7 +23,7 @@
     };
 
 
-    // À³¸Ó¦³§ó¦nªº°µªk
+    // æ‡‰è©²æœ‰æ›´å¥½çš„åšæ³•
     var funcColle = {
         onSelect: {
             basic: function(dateText, inst){
@@ -32,7 +32,7 @@
                     ? inst.selectedYear + 1911 : inst.selectedYear;*/
                 dateNative = new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay);
 
-                // ¦~¤À¤p©ó100·|³Q¸É¦¨19**, ­n°µ¨Ò¥~³B²z
+                // å¹´åˆ†å°æ–¼100æœƒè¢«è£œæˆ19**, è¦åšä¾‹å¤–è™•ç†
                 var yearTW = inst.selectedYear > 1911
                     ? padLeft(inst.selectedYear - 1911, 4)
                     : inst.selectedYear;
@@ -51,23 +51,23 @@
     };
 
     var twSettings = {
-        closeText: 'Ãö³¬',
-        prevText: '¤W­Ó¤ë',
-        nextText: '¤U­Ó¤ë',
-        currentText: '¤µ¤Ñ',
-        monthNames: ['¤@¤ë','¤G¤ë','¤T¤ë','¥|¤ë','¤­¤ë','¤»¤ë',
-            '¤C¤ë','¤K¤ë','¤E¤ë','¤Q¤ë','¤Q¤@¤ë','¤Q¤G¤ë'],
-        monthNamesShort: ['¤@¤ë','¤G¤ë','¤T¤ë','¥|¤ë','¤­¤ë','¤»¤ë',
-            '¤C¤ë','¤K¤ë','¤E¤ë','¤Q¤ë','¤Q¤@¤ë','¤Q¤G¤ë'],
-        dayNames: ['¬P´Á¤é','¬P´Á¤@','¬P´Á¤G','¬P´Á¤T','¬P´Á¥|','¬P´Á¤­','¬P´Á¤»'],
-        dayNamesShort: ['©P¤é','©P¤@','©P¤G','©P¤T','©P¥|','©P¤­','©P¤»'],
-        dayNamesMin: ['¤é','¤@','¤G','¤T','¥|','¤­','¤»'],
-        weekHeader: '©P',
+        closeText: 'é—œé–‰',
+        prevText: 'ä¸Šå€‹æœˆ',
+        nextText: 'ä¸‹å€‹æœˆ',
+        currentText: 'ä»Šå¤©',
+        monthNames: ['ä¸€æœˆ','äºŒæœˆ','ä¸‰æœˆ','å››æœˆ','äº”æœˆ','å…­æœˆ',
+            'ä¸ƒæœˆ','å…«æœˆ','ä¹æœˆ','åæœˆ','åä¸€æœˆ','åäºŒæœˆ'],
+        monthNamesShort: ['ä¸€æœˆ','äºŒæœˆ','ä¸‰æœˆ','å››æœˆ','äº”æœˆ','å…­æœˆ',
+            'ä¸ƒæœˆ','å…«æœˆ','ä¹æœˆ','åæœˆ','åä¸€æœˆ','åäºŒæœˆ'],
+        dayNames: ['æ˜ŸæœŸæ—¥','æ˜ŸæœŸä¸€','æ˜ŸæœŸäºŒ','æ˜ŸæœŸä¸‰','æ˜ŸæœŸå››','æ˜ŸæœŸäº”','æ˜ŸæœŸå…­'],
+        dayNamesShort: ['å‘¨æ—¥','å‘¨ä¸€','å‘¨äºŒ','å‘¨ä¸‰','å‘¨å››','å‘¨äº”','å‘¨å…­'],
+        dayNamesMin: ['æ—¥','ä¸€','äºŒ','ä¸‰','å››','äº”','å…­'],
+        weekHeader: 'å‘¨',
         dateFormat: 'yy/mm/dd',
         firstDay: 1,
         isRTL: false,
         showMonthAfterYear: true,
-        yearSuffix: '¦~',
+        yearSuffix: 'å¹´',
 
         onSelect: function(dateText, inst){
             $(this).val(funcColle.onSelect.basic(dateText, inst));
@@ -77,16 +77,16 @@
         }
     };
 
-    // §âyearText´«¦¨¥Á°ê
+    // æŠŠyearTextæ›æˆæ°‘åœ‹
     var replaceYearText = function(){
         var $yearText = $('.ui-datepicker-year');
 
         if(twSettings.changeYear !== true){
-            $yearText.text('¥Á°ê' + dateTW.getFullYear());
+            $yearText.text('æ°‘åœ‹' + dateTW.getFullYear());
         }else{
-            // ¤U©Ô¿ï³æ
+            // ä¸‹æ‹‰é¸å–®
             if($yearText.prev('span.datepickerTW-yearPrefix').length === 0){
-                $yearText.before("<span class='datepickerTW-yearPrefix'>¥Á°ê</span>");
+                $yearText.before("<span class='datepickerTW-yearPrefix'>æ°‘åœ‹</span>");
             }
             $yearText.children().each(function(){
                 if(parseInt($(this).text()) > 1911){
@@ -100,16 +100,16 @@
 
         // setting on init,
         if(typeof options === 'object'){
-            //onSelect¨Ò¥~³B²z, Á×§KÂĞ»\
+            //onSelectä¾‹å¤–è™•ç†, é¿å…è¦†è“‹
             if(typeof options.onSelect === 'function'){
                 funcColle.onSelect.newFunc = options.onSelect;
                 options.onSelect = twSettings.onSelect;
             }
-            // year range¥¿³W¤Æ¦¨¦è¤¸, ¤p©ó1911ªº¼Æ¦r³£·|³Q·í¦¨¥Á°ê¦~
+            // year rangeæ­£è¦åŒ–æˆè¥¿å…ƒ, å°æ–¼1911çš„æ•¸å­—éƒ½æœƒè¢«ç•¶æˆæ°‘åœ‹å¹´
             if(options.yearRange){
                 var temp = options.yearRange.split(':');
                 for(var i = 0; i < temp.length; i += 1){
-                    //¥Á°ê«e³B²z
+                    //æ°‘åœ‹å‰è™•ç†
                     if(parseInt(temp[i]) < 1 ){
                         temp[i] = parseInt(temp[i]) + 1911;
                     }else{
@@ -128,7 +128,7 @@
 
         // setting after init
         if(arguments.length > 1){
-            // ¥Ø«eÁÙ¨S·Q¨ì¥¿±`ªº¸Ñªk, ¥ı¥ÎÂà´«¦¨init setting objªº§Î¦¡
+            // ç›®å‰é‚„æ²’æƒ³åˆ°æ­£å¸¸çš„è§£æ³•, å…ˆç”¨è½‰æ›æˆinit setting objçš„å½¢å¼
             if(arguments[0] === 'option'){
                 options = {};
                 options[arguments[1]] = arguments[2];
@@ -153,7 +153,7 @@
                     $(this).datepicker('setDate', twSettings.defaultDate);
                 }
 
-                // ·í¦³year range®É, selectªì©l¤Æ³]¦¨rangeªº³Ì¥½¦~
+                // ç•¶æœ‰year rangeæ™‚, selectåˆå§‹åŒ–è¨­æˆrangeçš„æœ€æœ«å¹´
                 if(twSettings.yearRange){
                     var $yearSelect = $('.ui-datepicker-year'),
                         nowYear = twSettings.defaultDate

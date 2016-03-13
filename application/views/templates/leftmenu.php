@@ -1,9 +1,9 @@
 	<nav id="column-left" class="my_scrollbar active">
     	<div id="title_edit_menu">
-        	
+
         	<ul class="menu">
             	<li><a href="<?=base_url('title_edit');?>">抬頭編輯</a></li>
-            	
+
             </ul>
         	<ul id="year_menu"  class="menu">
             </ul>
@@ -12,9 +12,9 @@
         <div >
         </div>
     </nav>
-    
+
     <script>
-		var start_year = 100;
+		var start_year = 104;
 		var d = new Date();
 		$(document).ready(function(e) {
             for(i = d.getFullYear()-1911 ;i >=start_year  ; i--)

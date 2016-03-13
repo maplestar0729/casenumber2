@@ -12,27 +12,30 @@
 
 	<link href="<?=base_url('public/plugin/bootstrap-3.3.1-dist/css/bootstrap.min.css');?>" rel="stylesheet" >
     <script src="<?=base_url('public/plugin/bootstrap-3.3.1-dist/js/bootstrap.min.js');?>" type="text/javascript"></script>
-    
-    
-	<link href="<?=base_url('public/plugin/bootstrap-table-master/dist/bootstrap-table.min.css');?>" rel="stylesheet" >
+
+
+		<link href="<?=base_url('public/plugin/bootstrap-table-master/dist/bootstrap-table.min.css');?>" rel="stylesheet" >
+
+		<link href="<?=base_url('public/plugin/cal/cal.css');?>" rel="stylesheet" >
+		<script src="<?=base_url('public/plugin/cal/cal.js');?>" type="text/javascript"></script>
+
     <script src="<?=base_url('public/plugin/bootstrap-table-master/dist/bootstrap-table.min.js');?>" type="text/javascript"></script>
     <script src="<?=base_url('public/plugin/bootstrap-table-master/dist/locale/bootstrap-table-zh-TW.min.js');?>" type="text/javascript"></script>
-    
-    <script src="<?=base_url('public/plugin/JQueryDatePickerTW-master/JQueryDatePickerTW.js');?>" type="text/javascript"></script>
-    
 
+    <script src="<?=base_url('public/plugin/JQueryDatePickerTW-master/JQueryDatePickerTW.js');?>" type="text/javascript"></script>
+
+		<link href="<?=base_url('public/css/stylesheet.css');?>" rel="stylesheet" >
+	<link href="<?=base_url('public/css/mycss.css');?>" rel="stylesheet" >
 	<script src="<?=base_url('public/js/myjs.js');?>" type="text/javascript"></script>
-	
-	<link href="<?=base_url('public/css/stylesheet.css');?>" rel="stylesheet" >
+
 	<script> var base_url="<?=base_url();?>"; </script>
 </head>
 <body>
 	<div id="container">
 		<?=$leftmenu;?>
 		<div id="content" class="clearfix my_scrollbar">
-			<?=$body;?>			
+			<?=$body;?>
 		</div>
 	</div>
 </body>
 </html>
-	

@@ -1,0 +1,59 @@
+﻿<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="cal.css">
+
+<script type="text/javascript" src="../../js/jquery-1.12.0.min.js"></script>
+<script type="text/javascript" src="cal.js">
+</script>
+
+
+</head>
+<body >
+	<input id="test">
+	
+	</div>
+
+	<script>
+
+		var calset={
+				"dow":['日','月','火','水','土','金','木'],
+				"tbBgColor":"91FEFF",
+				"months":["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"]
+			};
+		$("#test").calDate(calset);
+/*		name="test";
+		document.write("<form id="+name+">");
+		document.write("<input type='text' name=dateField size='12'>");
+		document.write("<a href='javascript:picksel(\""+name+"\",calset)' id='setbutten"+name+"'>select</a>");
+		document.write("</form>");*/
+
+		var calset2={"dow":['日','一','二','三','四','五','六'],
+				"months":["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"]
+			};
+		name="test2";
+		document.write("<form id="+name+">");
+		document.write("<input type='text' name=dateField size='12'>");
+		document.write("<a href='javascript:picksel(\""+name+"\",calset2)' id='setbutten"+name+"'>select</a>");
+		document.write("</form>");
+
+
+		var calset3={"tbBgColor":"#77FF77"};
+		name="test3";
+		document.write("<form id="+name+">");
+		document.write("<input type='text' name=dateField size='12'>");
+		document.write("<a href='javascript:picksel(\""+name+"\",calset3)' id='setbutten"+name+"'>select</a>");
+		document.write("</form>");
+
+
+		name="test4";
+		document.write("<form id="+name+">");
+		document.write("<input type='text' name=dateField size='12'>");
+		document.write("<a href='javascript:picksel(\""+name+"\")' id='setbutten"+name+"'>select</a>");
+		document.write("</form>");
+
+	</script>
+
+
+</body>
+</html>
