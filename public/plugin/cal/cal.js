@@ -10,18 +10,21 @@ function makecaldef(strName)
 	this.formname='';
 	this.month=dt.getMonth();
 	this.year=dt.getFullYear();
+	this.day=dt.getDate();
 	this.currMonth=dt.getMonth();
 	this.currYear=dt.getFullYear();
+	this.currDay=dt.getDate();
 	this.tbtag=0;
 	this.DOW;
 	this.bgcolor;
 	this.monthname;
 	this.click_over;
-	this.cal_emt = $("#tb_cal_date");
-	this.view_ans=function () {
-
-		show_state = this.cal_emt.css("display");
-		if( show_state == "block")
+	this.cal_emt = null;
+	this.element_type;
+	this.modal_emt = null;
+	this.view_ans = function () {
+		show_state = this.modal_emt.css("display");
+		if( show_state ==  "none")
 		{
 			bObj = this.formname[0];
 			x=$(bObj).offset().left;
@@ -31,15 +34,15 @@ function makecaldef(strName)
 			this.cal_emt.css({left:x,top:y});
 			//console.log(this.cal_emt.offset().left + " " + this.cal_emt.offset().top);
 			//console.log(x + " " + y + " ");
-			if($("#tb_cal_modal").length > 0)
+			if(this.modal_emt)
 			{
-					$("#tb_cal_modal").show();
+					this.modal_emt.show();
 			}
 			this.tbtag=1;
 //			alert(this.formname);
-		} else if(show_state  == "none") {
+		} else if(show_state  == "block") {
 			//this.cal_emt.hide();
-			$("#tb_cal_modal").hide();
+			this.modal_emt.hide();
 			this.tbtag=0;
 //			alert(this.tbtag);
 		}
@@ -92,7 +95,10 @@ function makecaldef(strName)
 		mon++;
 		//debugger;
 		dateStr = (this.year-1911) + "/" + mon+"/"+day;
-		$(this.formname).val(dateStr);
+		if(this.element_type == "html")
+				$(this.formname).html(dateStr);
+		else
+				$(this.formname).val(dateStr);
 //		alert(document.forms[this.formname].dateField.offsetLeft);
 		this.view_ans();
 		if(this.click_over)
@@ -169,24 +175,23 @@ function makecaldef(strName)
 			dt=new Date();
 			Day=dt.getDate();
 
-			if (i<10) {
-				val = "&nbsp;"+i+"&nbsp;";
-			} else {
-				val = i;
-			}
+			val = i;
 			if(this.month==this.currMonth&& this.year==this.currYear && i==Day)
 			{
-				vCode+="<td align=center id="+slotName+" bgcolor=yellow>";
-				vCode+="<a class=todayint href='javascript:"+this.name+".setDate("+val+",\"moncalendar\")'><font color='#00AA00'>"+val+"</font></a></td>";
-			} else
-			if(slotIndx%7==1 || slotIndx%7==0)
+				vCode+="<td align=center  bgcolor=yellow>";
+				vCode+="<a class='todayint dayClickEvent'>"+val+"</a></td>";
+			}else if (i == this.day) {
+
+				vCode+="<td align=center  bgcolor='blue'>";
+				vCode+="<a class='setDay dayClickEvent'>"+val+"</a></td>";
+			}	 else if(slotIndx%7==1 || slotIndx%7==0)
 		 	{
-				vCode+="<td align=center id="+slotName+" bgcolor=#dddddd>";
-				vCode+="<a class=holint href='javascript:"+this.name+".setDate("+val+",\"moncalendar\")'><font color='red'>"+val+"</font></a></td>";
+				vCode+="<td align=center  bgcolor=#dddddd>";
+				vCode+="<a class='holint dayClickEvent'>"+val+"</a></td>";
 			}else
 			{
-				vCode+="<td align=center id="+slotName+" >";
-				vCode+="<a class=no_holint href='javascript:"+this.name+".setDate("+val+",\"moncalendar\")'><font color='black'>"+val+"</font></a></td>";
+				vCode+="<td align=center  >";
+				vCode+="<a class='no_holint dayClickEvent'>"+val+"</a></td>";
 			}
 			if(slotIndx%7==0)
 			vCode+="</tr><tr>";
@@ -197,8 +202,105 @@ function makecaldef(strName)
 
 		//alert(this.formname);
 		this.cal_emt.html(vCode);
+		this.modal_emt.html(this.cal_emt);
+		var temp_cal_element = this;
+		$(".dayClickEvent").click(function(){
+				temp_cal_element.setDate($(this).html());
+		});
 	};
 
+	this.picksel = function picksel(cal_element,calset)
+	{
+
+			if(this.modal_emt == null)
+			{
+					tbCode = "";
+					tbCode += "<div id='tb_cal_modal' style='display:none;'>"
+					//tbCode += '<div id="modal" class="modal hide fade in" data-keyboard="false">';
+
+					//tbCode += "</div>"
+					tbCode += "</div>"
+					$("body").append(tbCode);
+
+					this.modal_emt = $("#tb_cal_modal");
+					tbCode = "<div id='tb_cal_date' class='tbclass' ></div>";
+					this.cal_emt = $(tbCode);
+					this.modal_emt.html(tbCode);
+					//$("body").append(tbCode);
+					/*this.modal_emt.on("click",function(){
+							$(this).hide();
+							moncalendar.tbtag=0;
+					});*/
+					$("body").click(function(e){
+							if(moncalendar.modal_emt.css("display") == 'block')
+							{
+								e.stopPropagation();
+								moncalendar.modal_emt.hide();
+								moncalendar.tbtag=0;
+							}
+					});
+					this.modal_emt.on("click",function(e){
+							e.stopPropagation();
+					});
+
+			}
+
+			if(calset)
+			{
+				if(calset.dow)
+					DOW=calset.dow;
+				else DOW=['S','M','T','W','T','F','S'];
+				if(calset.tbBgColor)
+					bgcolor=calset.tbBgColor;
+				else bgcolor="yellow";
+				if(calset.months)
+					monthname=calset.months;
+				else monthname=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+				if(calset.click_over)
+				{
+						this.click_over = calset.click_over;
+				}else{
+						this.click_over = null;
+				}
+				if(calset.element_type)
+						this.element_type = calset.element_type;
+			}else
+			{
+				DOW=['S','M','T','W','T','F','S'];
+				bgcolor="yellow";
+				monthname=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+			}
+			//alert(DOW);
+
+			if(cal_element.val() || cal_element.html())
+			{
+				if(this.element_type == "html")
+						strDate = cal_element.html();
+				else
+						strDate = cal_element.val();
+				dt=new Date(strDate);
+	//			alert(dt);
+				this.year=dt.getFullYear();
+				if( dt.getFullYear() < 2000)
+				{
+
+					this.year += 1911;
+				}
+				this.month=dt.getMonth();
+				this.day = dt.getDate();
+			}else {
+				dt=new Date();
+				this.month=dt.getMonth();
+				this.year=dt.getFullYear();
+			}
+			this.monthname=monthname;
+			this.formname = cal_element;
+			this.DOW = DOW ;
+			this.bgcolor=bgcolor;
+	//		alert(DOW);
+			this.view_ans();
+			this.showcal();
+	};
 
 
 }
@@ -206,86 +308,17 @@ function makecaldef(strName)
 
 
 var moncalendar=0;
-function picksel(cal_element,calset)
-{
 
-		if($("#tb_cal_date").length == 0)
-		{
-				tbCode = "";
-				tbCode += "<div class='modal' id='tb_cal_modal'>"
-				tbCode += '<div class="modal-backdrop fade in" ></div>';
-				tbCode += "<div id='tb_cal_date' class='tbclass ' ></div>";
-				tbCode += "</div>"
-				$("body").append(tbCode);
-				$("#tb_cal_modal").on("click",function(){
-						$("#tb_cal_modal").hide();
-						moncalendar.tbtag=0;
-				});
-		}
-		if(moncalendar==0)
-		{
-				moncalendar=new makecaldef("moncalendar");
-		}
-		if($("#tb_cal_modal").length > 0){
-
-
-		}
-		if(calset)
-		{
-			if(calset.dow)
-				DOW=calset.dow;
-			else DOW=['S','M','T','W','T','F','S'];
-			if(calset.tbBgColor)
-				bgcolor=calset.tbBgColor;
-			else bgcolor="yellow";
-			if(calset.months)
-				monthname=calset.months;
-			else monthname=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-			if(calset.click_over)
-			{
-					moncalendar.click_over = calset.click_over
-			}else{
-					moncalendar.click_over = null;
-			}
-		}else
-		{
-			DOW=['S','M','T','W','T','F','S'];
-			bgcolor="yellow";
-			monthname=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-		}
-		//alert(DOW);
-
-		if(cal_element.val())
-		{
-			strDate = cal_element.val();
-			dt=new Date(strDate);
-//			alert(dt);
-			moncalendar.year=dt.getFullYear();
-			if( dt.getFullYear() < 2000)
-			{
-
-				moncalendar.year += 1911;
-			}
-			moncalendar.month=dt.getMonth();
-		}else {
-			dt=new Date();
-			moncalendar.month=dt.getMonth();
-			moncalendar.year=dt.getFullYear();
-		}
-		moncalendar.monthname=monthname;
-		moncalendar.formname = cal_element;
-		moncalendar.DOW = DOW ;
-		moncalendar.bgcolor=bgcolor;
-//		alert(DOW);
-		moncalendar.view_ans();
-		moncalendar.showcal();
-};
 
 $.fn.calDate = function (options){
 
 	//debugger;
+	if(moncalendar==0)
+	{
+			moncalendar = new makecaldef("moncalendar");
+	}
 	$(this).on("click", function(e){
 		id = $(this).attr("id");
-		picksel($(this),options);
+		moncalendar.picksel($(this),options);
 	});
 }

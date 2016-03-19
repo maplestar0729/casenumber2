@@ -5,7 +5,8 @@
             	<li><a href="<?=base_url('title_edit');?>">抬頭編輯</a></li>
 
             </ul>
-        	<ul id="year_menu"  class="menu">
+        		<ul id="year_menu"  class="menu">
+							<li><a href="<?=base_url();?>">全部</a></li>
             </ul>
 
         </div>
