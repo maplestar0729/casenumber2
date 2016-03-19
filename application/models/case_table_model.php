@@ -75,7 +75,14 @@ class case_table_model extends CI_Model{
 		return $ans;
   }
 	public function del_undecided_tab($id){
-			$this->db->delete('caseindex_caseno_undecided', array('id' => $id));
+		try
+		{
+			$ans = $this->db->delete('caseindex_caseno_undecided', array('id' => $id));
+		} catch (Exception $e){
+			$ans = false;
+		}
+
+		return $ans;
 	}
 }
 ?>

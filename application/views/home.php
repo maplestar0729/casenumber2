@@ -464,7 +464,8 @@ window.statusEvents = {
 
 function undecidedEditFormatter(){
     uCode = "";
-    uCode += "<a href='#addModal' data-toggle='modal' class='glyphicon glyphicon-share chgToFormal' ></a>";
+    uCode += "<a href='#addModal' data-toggle='modal' class='glyphicon glyphicon-share chgToFormal' ></a> ";
+    uCode += "<a  class='glyphicon glyphicon-remove delUndecided' ></a>";
     return uCode;
 }
 
@@ -473,7 +474,25 @@ window.undecidedEditEvents = {
         $("#case_code_year").val(row.year);
         $("#case_name").val(row.name);
         $("#undecided_tab_id").val(row.id);
-    }
+    },
+    "click .delUndecided" : function (e, value, row, index) {
+        if(confirm("是否刪除"))
+        {
+            data = new Object();
+            data['id'] = row.id;
+            $.ajax({
+                  url:base_url+"home/del_undecided",
+                  data:data,
+                  dataType:"JSON",
+                  type:"POST",
+                  success:function(){
+                      location.reload();
+
+                  }
+
+            });
+        }
+    },
 }
 
 

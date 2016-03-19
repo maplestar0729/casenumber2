@@ -98,7 +98,12 @@ class home extends MY_Controller{
     //$this->index($data_post["year"]);
 
   }
-
+  public function del_undecided()
+  {
+      $data_post = $this->input->post(NULL, TRUE);
+      //echo json_encode($data_post["id"]);
+      echo $this->case_table_model->del_undecided_tab($data_post["id"]);
+  }
 
 }
 ?>
