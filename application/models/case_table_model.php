@@ -84,5 +84,15 @@ class case_table_model extends CI_Model{
 
 		return $ans;
 	}
+	public function del_case_tab($id){
+		try
+		{
+			$ans = $this->db->delete('caseindex_caseno', array('id' => $id));
+		} catch (Exception $e){
+			$ans = false;
+		}
+
+		return $ans;
+	}
 }
 ?>

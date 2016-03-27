@@ -18,3 +18,23 @@ input[type="text"] { padding: 0.4em; font-family: Arial; }
 {
 	background: #fffbe1;
 }
+.row_date
+{
+	width: 70%;
+	height: 20px;
+}
+.menu_parent
+{
+	color:white;
+}
+.menu_children
+{
+	display: none;
+}
+.case_title {
+	padding-left: 160px;
+	padding-top: 30px;
+}
+.glyphicon{
+	font-size: 18px;
+}

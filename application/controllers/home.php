@@ -12,7 +12,10 @@ class home extends MY_Controller{
 
   		$data['title_sort'] = $this->case_index_model->get_title_sort();
       $data['year'] = $year;
+      $data['page_name'] = "case_show";
 
+      $data["get_case_tab_link"] = "/home/get_case_tab/".$year;
+      $data["search_case_tab_undecided_link"] = "/home/get_case_tab_undecided/".$year;
 
   		$this->template("home",$data);
     }
@@ -104,6 +107,13 @@ class home extends MY_Controller{
       //echo json_encode($data_post["id"]);
       echo $this->case_table_model->del_undecided_tab($data_post["id"]);
   }
+  public function del_case()
+  {
 
+    $data_post = $this->input->post(NULL, TRUE);
+    //echo json_encode($data_post["id"]);
+    echo $this->case_table_model->del_case_tab($data_post["id"]);
+
+  }
 }
 ?>

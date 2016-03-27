@@ -19,7 +19,7 @@
 		<link href="<?=base_url('public/plugin/cal/cal.css');?>" rel="stylesheet" >
 		<script src="<?=base_url('public/plugin/cal/cal.js');?>" type="text/javascript"></script>
 
-    <script src="<?=base_url('public/plugin/bootstrap-table-master/dist/bootstrap-table.min.js');?>" type="text/javascript"></script>
+    <script src="<?=base_url('public/plugin/bootstrap-table-master/dist/bootstrap-table.js');?>" type="text/javascript"></script>
     <script src="<?=base_url('public/plugin/bootstrap-table-master/dist/locale/bootstrap-table-zh-TW.min.js');?>" type="text/javascript"></script>
 
     <script src="<?=base_url('public/plugin/JQueryDatePickerTW-master/JQueryDatePickerTW.js');?>" type="text/javascript"></script>
@@ -33,6 +33,7 @@
 <body>
 	<div id="container">
 		<?=$leftmenu;?>
+		<div class="case_title"><h1>案件編號系統</h1></div>
 		<div id="content" class="clearfix my_scrollbar">
 			<?=$body;?>
 		</div>

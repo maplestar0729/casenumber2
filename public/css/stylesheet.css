@@ -168,12 +168,12 @@ span.hidden-xs, span.hidden-sm, span.hidden-md, span.hidden-lg {
 	transition: all 0.3s;
 	height: 100%;
 	position: absolute;
-	padding-top: 50px;
+	padding-top: 80px;
 	overflow: auto ;
 	width: 100%;
 	right: 0px;
 	top: 0px;
-	padding-left: 120px;
+	padding-left: 160px;
 	padding-right:30px;
 }
 
@@ -334,7 +334,7 @@ span.hidden-xs, span.hidden-sm, span.hidden-md, span.hidden-lg {
 }
 }
 #column-left.active {
-	width: 100px;
+	width: 140px;
 }
 #column-left.active .menu li i {
 	font-size: 16px;

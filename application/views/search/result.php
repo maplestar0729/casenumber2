@@ -13,26 +13,14 @@
     color: white;
 }
 </style>
+<script>
 
-<script type="text/javascript" src="<?=base_url('public/plugin/bootstrap-table-master/src/extensions/export/bootstrap-table-export.js');?>" type="text/javascript"></script>
-<script type="text/javascript" src="<?=base_url('public/plugin/tableExport.jquery.plugin/tableExport.js');?>"></script>
-<script type="text/javascript" src="<?=base_url('public/plugin/tableExport.jquery.plugin/jspdf/libs/sprintf.js');?>"></script>
-<script type="text/javascript" src="<?=base_url('public/plugin/tableExport.jquery.plugin/jspdf/jspdf.js');?>"></script>
-<script type="text/javascript" src="<?=base_url('public/plugin/tableExport.jquery.plugin/jspdf/libs/base64.js');?>"></script>
+</script>
 <div class="bs-docs-grid">
     <div id="toolbar" class="list-inline">
         <ul class="list-inline">
-        <?php if(isset($year)){?>
     	<li><a href="#addModal" data-toggle="modal"><button id="new" type="button" class="btn btn-primary">新增</button></a></li>
         <li><h3><?=$year?>年案件編號表</h3></li>
-        <?php } else{?>
-            <li>
-                <form action="<?=base_url('/search/index')?>"  method="GET" accept-charset="utf-8" >
-                    <input type="text" name="str" value="<?=$search_str?>">
-                    <button type="submit">搜尋</button>
-                </form>
-            </li>
-        <?php }?>
         </ul>
     </div>
 
@@ -41,18 +29,17 @@
 			data-toolbar="#toolbar"
             data-search="true"
             data-show-refresh="true"
+            data-show-toggle="true"
             data-show-columns="true"
             data-show-export="true"
             data-detail-formatter="detailFormatter"
             data-minimum-count-columns="2"
             data-show-pagination-switch="true"
-            data-pagination="false"
             data-pagination="true"
             data-sort-name="caseno"
-            data-url="<?=base_url($get_case_tab_link)?>"
+            data-url="<?=base_url("/home/get_case_tab/".$year)?>"
 			data-page-list="[10, 20, 25 , 50, 100, ALL]"
             data-tab-name='caseindex_caseno'
-            data-show-footer="false"
     	>
         <thead>
 
@@ -65,7 +52,7 @@
 			for($i=0; $title_sort[$i]['title_name'] != ""; $i++)
 			{
 			    //echo "<th data-field='title".($title_sort[$i]['id']+1)."_state' data-cell-style='statusStyle'  data-width='5'></th>";
-			    echo "<th data-field='title".($title_sort[$i]['id']+1)."' data-formatter='statusFormatter' data-events='statusEvents' data-width='80'>".$title_sort[$i]['title_name']."日期</th>";
+			    echo "<th data-field='title".($title_sort[$i]['id']+1)."' data-formatter='statusFormatter' data-events='statusEvents' data-width='50'>".$title_sort[$i]['title_name']."日期</th>";
 
 			}
 			?>
@@ -73,200 +60,193 @@
         </thead>
         </table>
 
-</div>
-<div>
 
+        <div style="width:60%;min-width: 450px;">
+        <div id="toolbar_undecided">
+            <ul class="list-inline">
+            <li><a href="#addModal_undecided" data-toggle="modal"><button id="new" type="button" class="btn btn-primary">新增</button></a></li>
+            <li><h3><?=$year?>年尚未編號案件表</h3></li>
+            </ul>
+        </div>
+        <table id="year_undecided"
+                data-toggle="table"
+                data-toolbar="#toolbar_undecided"
+                data-search="true"
+                data-show-refresh="true"
+                data-show-toggle="true"
+                data-show-columns="true"
+                data-show-export="true"
+                data-minimum-count-columns="2"
+                data-show-pagination-switch="true"
+                data-pagination="true"
+                data-id-field="caseno"
+                data-url="<?=base_url("/home/get_case_tab_undecided/".$year)?>"
+                data-page-list="[10, 20, 25 , 50, 100, ALL]"
+                data-tab-name='caseindex_caseno_undecided'
+            >
+            <thead>
 
-            <div style="width:60%;min-width: 450px;">
-            <div id="toolbar_undecided">
-                <ul class="list-inline">
-                <?php if(isset($year)){?>
-                <li><a href="#addModal_undecided" data-toggle="modal"><button id="new" type="button" class="btn btn-primary">新增</button></a></li>
-                <li><h3><?=$year?>年尚未編號案件表</h3></li>
-                <?php } else{?>
+                <tr>
+                    <th data-field='id' data-width='50'	data-visible="false">id</th>
+                    <th data-field='year' data-width='20' data-sortable="true" data-filter-control="true">年</th>
+                    <th data-field='name' data-width='50'  data-formatter="nameFormatter" data-events="nameEvents"  data-sortable="true" data-filter-control="true" data-editable="true"  >案件名稱</th>
+                    <th data-field='edit' data-width='30' data-formatter="undecidedEditFormatter" data-events="undecidedEditEvents">編輯</th>
 
+                </tr>
+            </thead>
+            </table>
+        </div>
+	<div class="modal fade " id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" data-keyboard="false" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">新增</h4>
+				</div>
+				<div class="modal-body clearfix" >
+					<form action="<?=base_url('/home/new_case_data')?>"  method="post" accept-charset="utf-8" id="new_data_frm">
+                    <!--<form  method="post" accept-charset="utf-8" id="edit_frm">-->
+						<div class="form-group col-sm-12" >
+							<label class="col-md-3 control-label">案件編號</label>
+							<ul class="list-inline">
+                                <li ><input  type="text" class="form-control" name="case_code_en" id="case_code_en" maxlength="1" size="1" style="width:35px"  required="required" ></li>
+								<li ><select type="text" class="form-control case_modal_year" name="case_code_year" id="case_code_year"  style="width:70px"/>
+                                </select></li>
+								<li ><input type="text" class="form-control"  name="case_code_n" id="case_code_n" maxlength="2" size="2" style="width:70px"  required="required" ></li>
+							</ul>
+						</div>
+						<div class="form-group col-sm-12" >
+							<label class="col-sm-3 control-label">案件名稱</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" name="case_name" id="case_name"/>
+							</div>
+						</div>
+						<div class="form-group col-sm-12" >
+							<div class="col-sm-offset-3 col-sm-3">
 
-                <?php }?>
-                </ul>
-            </div>
-            <table id="year_undecided"
-                    data-toggle="table"
-                    data-toolbar="#toolbar_undecided"
-                    data-search="true"
-                    data-show-refresh="true"
-                    data-show-columns="true"
-                    data-show-export="true"
-                    data-minimum-count-columns="2"
-                    data-show-pagination-switch="true"
-                    data-pagination="true"
-                    data-id-field="caseno"
-                    data-url="<?=base_url($search_case_tab_undecided_link)?>"
-                    data-page-list="[10, 20, 25 , 50, 100, ALL]"
-                    data-tab-name='caseindex_caseno_undecided'
-                >
-                <thead>
+								 <a  id="save" class="btn btn-primary" >儲存</a>
+							</div>
+							<div class="col-sm-6">
+								 <div id="register_error" class="msg"></div>
+							</div>
+						</div>
+                        <input type="hidden" name="undecided_tab_id" id="undecided_tab_id" value="0">
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+    <div class="modal fade " id="addModal_undecided" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" data-keyboard="false" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">新增</h4>
+				</div>
+				<div class="modal-body clearfix" >
+					<form action="<?=base_url('/home/new_case_undecided')?>"  method="post" accept-charset="utf-8" id="new_data_frm_undecided">
+                    <!--<form  method="post" accept-charset="utf-8" id="edit_frm">-->
+						<div class="form-group col-sm-12" >
+							<label class="col-md-3 control-label">年</label>
+							<ul class="list-inline">
+								<li ><select type="text" class="form-control case_modal_year" name="case_code_year"  style="width:70px"/>
+                                </select></li>
+							</ul>
+						</div>
+						<div class="form-group col-sm-12" >
+							<label class="col-sm-3 control-label">案件名稱</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" name="case_name"/>
+							</div>
+						</div>
+						<div class="form-group col-sm-12" >
+							<div class="col-sm-offset-3 col-sm-3">
 
-                    <tr>
-                        <th data-field='id' data-width='50'	data-visible="false">id</th>
-                        <th data-field='year' data-width='20' data-sortable="true" data-filter-control="true">年</th>
-                        <th data-field='name' data-width='50'  data-formatter="nameFormatter" data-events="nameEvents"  data-sortable="true" data-filter-control="true" data-editable="true"  >案件名稱</th>
-                        <th data-field='edit' data-width='30' data-formatter="undecidedEditFormatter" data-events="undecidedEditEvents">編輯</th>
+								 <button type="submit" class="btn btn-primary" >儲存</button>
+							</div>
+							<div class="col-sm-6">
+								 <div id="register_error" class="msg"></div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade " id="editModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" data-keyboard="false" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">編輯</h4>
+				</div>
+				<div class="modal-body clearfix" >
+					<form action="<?=base_url('/home/update_caseno_data')?>"  method="post" accept-charset="utf-8" id="up_data_frm">
+                    <!--<form  method="post" accept-charset="utf-8" id="edit_frm">-->
+						<div class="form-group col-sm-12" >
+							<label class="col-sm-3 control-label">案件編號</label>
+							<div class="col-sm-9" id="edit_casnno">
 
-                    </tr>
-                </thead>
-                </table>
-            </div>
-    	<div class="modal fade " id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" data-keyboard="false" aria-hidden="true">
-    		<div class="modal-dialog">
-    			<div class="modal-content">
-    				<div class="modal-header">
-    					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    					<h4 class="modal-title">新增</h4>
-    				</div>
-    				<div class="modal-body clearfix" >
-    					<form action="<?=base_url('/home/new_case_data')?>"  method="post" accept-charset="utf-8" id="new_data_frm">
-                        <!--<form  method="post" accept-charset="utf-8" id="edit_frm">-->
-    						<div class="form-group col-sm-12" >
-    							<label class="col-md-3 control-label">案件編號</label>
-    							<ul class="list-inline">
-                                    <li ><input  type="text" class="form-control" name="case_code_en" id="case_code_en" maxlength="1" size="1" style="width:35px"  required="required" ></li>
-    								<li ><select type="text" class="form-control case_modal_year" name="case_code_year" id="case_code_year"  style="width:70px"/>
-                                    </select></li>
-    								<li ><input type="text" class="form-control"  name="case_code_n" id="case_code_n" maxlength="2" size="2" style="width:70px"  required="required" ></li>
-    							</ul>
-    						</div>
-    						<div class="form-group col-sm-12" >
-    							<label class="col-sm-3 control-label">案件名稱</label>
-    							<div class="col-sm-9">
-    								<input type="text" class="form-control" name="case_name" id="case_name"/>
-    							</div>
-    						</div>
-    						<div class="form-group col-sm-12" >
-    							<div class="col-sm-offset-3 col-sm-3">
+							</div>
+						</div>
+						<div class="form-group col-sm-12" >
+							<label class="col-sm-3 control-label">案件名稱</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" name="name" id="edit_case_name"/>
+							</div>
+						</div>
+                        <?php
+							for($i=0; $title_sort[$i]['title_name'] != ""; $i++)
+							{
+								echo '<div class="form-group col-sm-12" >
+										<label class="col-sm-3 control-label">'.$title_sort[$i]['title_name'].'日期</label>
+										<div class="col-sm-9">
+											<input type="text" class="status_date form-control" name="title'.($title_sort[$i]['id']+1).'" id="title'.($title_sort[$i]['id']+1).'"/>
+										</div>
+									</div>
+								';
+							}
+						?>
+                        <input type="hidden" id="edit_case_year" name="year" />
+                        <input type="hidden" id="edit_case_id" name="id" />
+						<div class="form-group col-sm-12" >
+							<div class="col-sm-offset-3 col-sm-3">
+                            	<button type="submit" class="btn btn-primary" >儲存</button>
+							</div>
+							<div class="col-sm-6">
+								 <div id="register_error" class="msg"></div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+    <div class="modal fade " id="delModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" data-keyboard="false" aria-hidden="true">
+		<div class="modal-dialog" style="width:200px">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">刪除確認</h4>
+				</div>
+				<div class="modal-body clearfix" >
+                    <input type="hidden" id="del_case_id" name="id" />
+                    <input type="hidden" id="tab_name" name="tab_name" />
+					<div class="form-group col-sm-12" >
+						<div class=" col-sm-3">
+                        	<button type="submit" class="btn btn-success del_btn" >刪除</button>
+						</div>
+                        <div class=" col-sm-1">
 
-    								 <a  id="save" class="btn btn-primary" >儲存</a>
-    							</div>
-    							<div class="col-sm-6">
-    								 <div id="register_error" class="msg"></div>
-    							</div>
-    						</div>
-                            <input type="hidden" name="undecided_tab_id" id="undecided_tab_id" value="0">
-    					</form>
-    				</div>
-    			</div>
-    		</div>
-    	</div>
-        <div class="modal fade " id="addModal_undecided" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" data-keyboard="false" aria-hidden="true">
-    		<div class="modal-dialog">
-    			<div class="modal-content">
-    				<div class="modal-header">
-    					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    					<h4 class="modal-title">新增</h4>
-    				</div>
-    				<div class="modal-body clearfix" >
-    					<form action="<?=base_url('/home/new_case_undecided')?>"  method="post" accept-charset="utf-8" id="new_data_frm_undecided">
-                        <!--<form  method="post" accept-charset="utf-8" id="edit_frm">-->
-    						<div class="form-group col-sm-12" >
-    							<label class="col-md-3 control-label">年</label>
-    							<ul class="list-inline">
-    								<li ><select type="text" class="form-control case_modal_year" name="case_code_year"  style="width:70px"/>
-                                    </select></li>
-    							</ul>
-    						</div>
-    						<div class="form-group col-sm-12" >
-    							<label class="col-sm-3 control-label">案件名稱</label>
-    							<div class="col-sm-9">
-    								<input type="text" class="form-control" name="case_name"/>
-    							</div>
-    						</div>
-    						<div class="form-group col-sm-12" >
-    							<div class="col-sm-offset-3 col-sm-3">
-
-    								 <button type="submit" class="btn btn-primary" >儲存</button>
-    							</div>
-    							<div class="col-sm-6">
-    								 <div id="register_error" class="msg"></div>
-    							</div>
-    						</div>
-    					</form>
-    				</div>
-    			</div>
-    		</div>
-    	</div>
-    	<div class="modal fade " id="editModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" data-keyboard="false" aria-hidden="true">
-    		<div class="modal-dialog">
-    			<div class="modal-content">
-    				<div class="modal-header">
-    					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    					<h4 class="modal-title">編輯</h4>
-    				</div>
-    				<div class="modal-body clearfix" >
-    					<form action="<?=base_url('/home/update_caseno_data')?>"  method="post" accept-charset="utf-8" id="up_data_frm">
-                        <!--<form  method="post" accept-charset="utf-8" id="edit_frm">-->
-    						<div class="form-group col-sm-12" >
-    							<label class="col-sm-3 control-label">案件編號</label>
-    							<div class="col-sm-9" id="edit_casnno">
-
-    							</div>
-    						</div>
-    						<div class="form-group col-sm-12" >
-    							<label class="col-sm-3 control-label">案件名稱</label>
-    							<div class="col-sm-9">
-    								<input type="text" class="form-control" name="name" id="edit_case_name"/>
-    							</div>
-    						</div>
-                            <?php
-    							for($i=0; $title_sort[$i]['title_name'] != ""; $i++)
-    							{
-    								echo '<div class="form-group col-sm-12" >
-    										<label class="col-sm-3 control-label">'.$title_sort[$i]['title_name'].'日期</label>
-    										<div class="col-sm-9">
-    											<input type="text" class="status_date form-control" name="title'.($title_sort[$i]['id']+1).'" id="title'.($title_sort[$i]['id']+1).'"/>
-    										</div>
-    									</div>
-    								';
-    							}
-    						?>
-                            <input type="hidden" id="edit_case_year" name="year" />
-                            <input type="hidden" id="edit_case_id" name="id" />
-    						<div class="form-group col-sm-12" >
-    							<div class="col-sm-offset-3 col-sm-3">
-                                	<button type="submit" class="btn btn-primary" >儲存</button>
-    							</div>
-    							<div class="col-sm-6">
-    								 <div id="register_error" class="msg"></div>
-    							</div>
-    						</div>
-    					</form>
-    				</div>
-    			</div>
-    		</div>
-    	</div>
-        <div class="modal fade " id="delModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" data-keyboard="false" aria-hidden="true">
-    		<div class="modal-dialog" style="width:200px">
-    			<div class="modal-content">
-    				<div class="modal-header">
-    					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    					<h4 class="modal-title">刪除確認</h4>
-    				</div>
-    				<div class="modal-body clearfix" >
-                        <input type="hidden" id="del_case_id" name="id" />
-                        <input type="hidden" id="tab_name" name="tab_name" />
-    					<div class="form-group col-sm-12" >
-    						<div class=" col-sm-3">
-                            	<button type="submit" class="btn btn-success del_btn" >刪除</button>
-    						</div>
-                            <div class=" col-sm-1">
-
-    						</div>
-                            <div class=" col-sm-3">
-                            	<button type="submit" class="btn btn-danger cancel_btn" data-dismiss="modal" aria-label="Close">取消</button>
-    						</div>
-    					</div>
-    				</div>
-    			</div>
-    		</div>
-    	</div>
+						</div>
+                        <div class=" col-sm-3">
+                        	<button type="submit" class="btn btn-danger cancel_btn" data-dismiss="modal" aria-label="Close">取消</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <script>
 
@@ -633,13 +613,6 @@ $(document).ready(function(e) {
         // Retrieve
 
     }
-    if($("#year_data_tab th").length > 7)
-    {
-        nowWidth = $("#year_data_tab").width();
-        x = $("#year_data_tab th").length - 7;
-        $("#year_data_tab").width(nowWidth + x*100);
-    }
-
 });
 
 </script>
