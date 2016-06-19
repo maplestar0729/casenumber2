@@ -8,21 +8,22 @@ input[type="text"] { padding: 0.4em; font-family: Arial; }
 .hover { background: #fffbe1; }
 .date_done
 {
-	color:blue;
+	color:	#770077;
 }
 .date_done_befor
 {
-	color:red;
+	color:blue;
 }
 .row_date:hover
 {
-	background: #fffbe1;
+	background: #DEDEBE;
 }
 .row_date
 {
 	width: 70%;
 	height: 20px;
 }
+
 .menu_parent
 {
 	color:white;
@@ -36,5 +37,23 @@ input[type="text"] { padding: 0.4em; font-family: Arial; }
 	padding-top: 30px;
 }
 .glyphicon{
-	font-size: 18px;
+	font-size: 16px;
+}
+.top_btn {
+	top:30px;
+	left:450px;
+	position: absolute;
+	z-index:50;
+	
+}
+#year_menu li a{
+	font-size:18px;
+}
+#old_year_menu li a{
+	font-size:18px;
+}
+.case_title{
+	font-family:標楷體;
+	font-weight:bolder;
+	font-size:36px;
 }

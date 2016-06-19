@@ -32,11 +32,17 @@
 </head>
 <body>
 	<div id="container">
-		<?=$leftmenu;?>
-		<div class="case_title"><h1>案件編號系統</h1></div>
+
+		<?=$top;?>
+		<!-- <div class="case_title">案件編號系統</div> -->
+
+
 		<div id="content" class="clearfix my_scrollbar">
 			<?=$body;?>
 		</div>
 	</div>
+	<script>
+
+	</script>
 </body>
 </html>

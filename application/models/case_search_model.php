@@ -6,13 +6,13 @@ class case_search_model extends CI_Model{
 	public function search_case_tab($search_data,$isOldTab){
 
 		$search_text = $search_data["search_text"];
-
+		//echo $search_text;
 		$this->db->select('*')
 			 ->from('caseindex_caseno')
 			 ->like('name',$search_text);
 		if($isOldTab == "old")
 		{
-			$this->db->where('year < ',(date("Y") - 1911) - 5);
+			$this->db->where('year <= ',(date("Y") - 1911) - 5);
 		}else {
 			$this->db->where('year > ',(date("Y") - 1911) - 5);
 		}
@@ -27,7 +27,7 @@ class case_search_model extends CI_Model{
 				 ->like('name',$search_text);
 			if($isOldTab == "old")
 			{
-				$this->db->where('year < ',(date("Y") - 1911) - 5);
+				$this->db->where('year <= ',(date("Y") - 1911) - 5);
 			}else {
 				$this->db->where('year > ',(date("Y") - 1911) - 5);
 			}

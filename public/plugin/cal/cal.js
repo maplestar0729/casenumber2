@@ -318,6 +318,7 @@ $.fn.calDate = function (options){
 			moncalendar = new makecaldef("moncalendar");
 	}
 	$(this).on("click", function(e){
+		e.stopPropagation();
 		id = $(this).attr("id");
 		moncalendar.picksel($(this),options);
 	});

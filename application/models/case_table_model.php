@@ -15,6 +15,18 @@ class case_table_model extends CI_Model{
 			}
 		return $this->db->get()->result_array();
 	}
+	public function get_case_name($year=0){
+		//$start_year = $this->config->load('start_year');
+			if($year == 0){
+				$this->db->select('caseno,name')
+					 ->from('caseindex_caseno');
+			}else{
+				$this->db->select('caseno,name')
+					 ->from('caseindex_caseno')
+					 ->where('year',$year);
+			}
+		return $this->db->get()->result_array();
+	}
 	public function get_case_tab_undecided($year)
   {
 		if($year == 0){
@@ -30,10 +42,21 @@ class case_table_model extends CI_Model{
 	public function new_case_data($case_data){
 		try
 		{
-			$ans = $this->db->insert('caseindex_caseno', $case_data);
-
+			//echo json_encode($case_data);
+			//$tmp =
+			$tmp = $this->db->select('*')
+					 ->from('caseindex_caseno')
+					 ->where('caseno',$case_data["caseno"])
+					 ->get()->result_array();
+			if($tmp )
+			{
+				$ans = $case_data["caseno"]."案件編號重複";
+			}else {
+				$this->db->insert('caseindex_caseno', $case_data);
+				$ans = "新增成功";
+			}
 		} catch (Exception $e){
-			$ans = false;
+			$ans = $e;
 		}
 		return $ans;
 	}

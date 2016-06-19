@@ -1,9 +1,14 @@
 
   <style>
- 
+
   #sortable { list-style-type: none; margin: 0; padding: 0; width:400px; }
   #sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em;  }
   #sortable li span { position: absolute; margin-left: -1.3em; }
+  .btn-mystyle{
+	color: #fff;
+    background-color: #5E825E;
+    border-color: #4cae4c;
+}
   </style>
   <script>
   $(function() {
@@ -11,9 +16,9 @@
     $( "#sortable" ).disableSelection();
   });
   </script>
+ <button value="儲存" class="btn btn-mystyle title-save top_btn">儲存</button>
 <div class="bs-docs-grid">
-<div class="row">
-    <div class="col-md-3 col-md-offset-3"><button value="儲存" class="btn btn-primary title-save">儲存</button></div></div>
+    
 </div>
 
 <ul id="sortable">
@@ -39,7 +44,7 @@
   <li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><a class="title-sort">20</a>：<input type="text"/></li>
 </ul>
 
-<button value="儲存" class="btn btn-primary title-save">儲存</button>
+<button value="儲存" class="btn btn-mystyle title-save">儲存</button>
 </div>
 <script >
 $(document).ready(function(e) {
@@ -48,13 +53,13 @@ $(document).ready(function(e) {
 //		alert(data[1].title_name);
 		for(i = 0 ; i < 20 ; i++)
 		{
-			$tCode += '<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><a class="title-sort">'+data[i].id+' </a>：<input type="text" value="'+data[i].title_name+'"/></li>'
+			$tCode += '<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><a class="title-sort">'+data[i].id+' </a>：<input type="text" maxlength="6" value="'+data[i].title_name+'"/></li>'
 		}
 		$("#sortable").html($tCode);
 	},"json");
 	var title_data = new Array(20);
 	$(".title-save").click(function(e){
-		
+
 			for(i = 0; i<20 ; i++)
 			{
 				title_data[i] = new Object;
@@ -68,10 +73,11 @@ $(document).ready(function(e) {
 				type: "post",
 				success: function(d,t,r){
 					alert("儲存成功");
-				}, 
+					location.href = base_url+"home/index/";
+				},
 				dataType: "json"
 				});
 		});
-	
+	$(".case_title").html("<h1>工作進度點編輯</h1>");
 });
 </script>

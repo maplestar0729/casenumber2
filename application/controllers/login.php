@@ -1,171 +1,110 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Login extends CI_Controller{
-    
+class Login extends MY_Controller{
+
     public function __construct(){
         parent::__construct();
+        $this->load->model('login_model');
+        $this->load->model('member_model');
     }
 
     public function index(){
-		if(!$this->session->userdata('logged_in'))
-		{
-			$data['img']=$this->captcha_img();
-			$this->load->view('login',$data);     
-		}
-		else
-		{
-			redirect(base_url('systems'));
-		}		
+  		if(!$this->session->userdata('case_number')["logged_in"])
+  		{
+  			//$data['img']=$this->captcha_img();
+  			$this->load->view('login/login.php');
+  		}
+  		else
+  		{
+  			redirect(base_url('logbook'));
+  		}
     }
 
-	//登入檢查
-	public function login_check(){
-		if( $this->session->userdata('logged_in') ){		//已登入
-            redirect( base_url('systems') );
-        }else{	
-			//驗證碼驗證
-			$this->load->library('securimage/securimage');
-			$img = new Securimage();
-			if( !$img->check( $this->input->post('captcha',true) ) ) {
-				$this->session->set_userdata('msg', '驗證碼錯誤!!');
-				redirect(base_url('login'));  
-			}
-			//帳密驗證
-            $this->form_validation->set_rules('username', '帳號', 'trim|required|xss_clean');
-            $this->form_validation->set_rules('password', '密碼', 'trim|required|callback_user_valid');   
+  	//登入檢查
+  	public function login_check(){
+  		if( $this->session->userdata('case_number')["logged_in"] ){		//已登入
+              redirect( base_url('logbook') );
+          }else{
+  			//驗證碼驗證
+  			// $this->load->library('securimage/securimage');
 
-            if($this->form_validation->run() == false){      //驗證失敗
-				redirect( base_url('login') );                                 
-            }else{                							//驗證成功
-				$name=$this->input->post('username',true);
-                redirect( base_url('systems') );                
-            }        
-        }	
-	}
-	
-	//認證密碼
-	public function user_valid($password){
-		if($this->session->userdata('logged_in'))
-		{
-			$username  = $this->session->userdata('logged_in')['account'];
-		}else
-		{
-		    $username  = $this->input->post('username',true);
-		}
-		$this->db->select('*')
-				 ->from('user')
-				 ->where('account',$username);
-		$result=$this->db->get()->row_array();
-		if($result && password_verify($password, $result['password']) ){		
-			$sess_array = array(      
-				'id'   		=> $result['id'],
-                'name' 		=> $result['name'],
-				'account'	=> $result['account']
-            );
-            $this->session->set_userdata('logged_in',$sess_array); 
-			$this->session->set_userdata('session_id', md5(microtime()+rand()));	
-			if($this->session->userdata('logged_in'))
-			{
-				echo 1;
-			}
-            return TRUE;
-		} else {
-			if($this->session->userdata('logged_in'))
-			{
-				echo 0;
-			}else
-			{
-				$this->session->set_userdata('msg', '登入失敗!!');
-			}
-			return FALSE;
-		}
+  			//帳密驗證
+              // $this->form_validation->set_rules('username', '帳號', 'trim|required|xss_clean');
+              // $this->form_validation->set_rules('password', '密碼', 'trim|required|callback_user_valid');
+              $uid = $this->input->post('uid',true);
+              $pw = $this->input->post('pw',true);
+              $user = $this->login_model->get_user($uid,$pw);
+              if($user == false){      //驗證失敗
+                  $data["login_error"] = "驗證失敗";
+        			    $this->load->view('login/login.php',$data);
+              }else{                							//驗證成功
+                  $session_data["case_number"]["user_name"] = $user[0]['name'];
+                  $session_data["case_number"]["user_id"] = $user[0]['id'];
+                  $session_data["case_number"]["class"] = $user[0]['clas'];
+                  $session_data["case_number"]["logged_in"] = true;
+  				        $this->session->set_userdata($session_data);
+                  redirect( base_url('login') );
+              }
+          }
+  	}
+
+  	//認證密碼
+    public function logout(){
+      $this->session->unset_userdata('case_number');
+      redirect( base_url('logbook') );
     }
-	
-	//驗證碼
-	public function captcha_img() 
-    {
-        return base_url('login/securimage_jpg');
-    }
-	//驗證碼設定
-    public function securimage_jpg() 
-    {
-        $this->load->library('securimage/securimage');
-        $img = new Securimage();
-		$img->charset = '0123456789';
-        $img->image_width = 100;
-        $img->image_height = 45;
-        $img->perturbation = 0;	//干擾雜訊度
-		$img->num_lines = 0;		//線條數
-		$img->text_transparency_percentage = 20; // 100 為全透明 
-		$img->image_bg_color = new Securimage_Color("#f6f6f6");
-        $img->use_transparent_text = true;        
-        //$img->use_wordlist = true; 		
-        $img->show(); // 套背景圖並顯示		
-    }
-	
-	//登出
-	public function logout(){
-        if ( $this->session->userdata('logged_in') ){
-            $this->session->unset_userdata('logged_in');
-            redirect(base_url('login'));
-        }else{
-            redirect(base_url('login'));
+  	public function edit(){
+        $uid = $this->session->userdata('case_number')["user_id"] ;
+        //echo $uid;
+        $post_data = $this->input->post(null,true);
+        if($post_data["old_pw"])
+        {
+          $user = $this->login_model->get_user($uid,$post_data["old_pw"]);
+          if($user == false)
+          {
+            echo "<script>alert(\"密碼錯誤\");</script>";
+          }else if($post_data["new_pw"] != $post_data["chk_pw"])
+          {
+            echo "<script>alert(\"兩次密碼不一致\");</script>";
+          }
+          $this->login_model->update_user_pw($uid,$post_data);
+          echo "<script>alert(\"修改成功\");</script>";
         }
+    		$this->logbook_template("login/edit");
     }
-	
-	//忘記密碼驗證及發送Email
-	/*public function forget(){
-		if(!$this->input->post()) redirect(base_url('login'));
-		//驗證碼驗證
-		$this->load->library('securimage/securimage');
-		$img = new Securimage();
-		if( !$img->check( $this->input->post('forget_captcha',true) ) ) {
-			echo json_encode('驗證碼錯誤!!');
-			return;
-		}
-		$this->form_validation->set_rules('forget_usr', 'Email', 'trim|required|xss_clean');
-		if($this->form_validation->run() == true){ 					
-			$email = $this->input->post('forget_usr',true);			
-            if($this->common_model->check_email($email)){		//帳號存在								
-				$session_key = md5($email.date("Y-m-d H:i:s"));
-				$link = base_url('login/reset_pwd')."/".$session_key;
-				$subject = '';
-				$content = '請點擊下面連結進行更改密碼：<br>'.$link;				
-				$this->common_model->send_email($email,$subject,$content);				
-				$key = array(
-					'session_key'   => $session_key,
-					'session_expire'=> date("Y-m-d H:i:s",mktime(date("H"),date("i"),date("s"),date("m"),date("d")+1,date("Y")))
-				);	
-				$this->db->where('email',$email)
-						 ->update('account',$key);			
-				echo json_encode(1);
-				return;	
-			}
-			else{												//帳號不存在
-				echo json_encode('此帳號不存在!');
-				return;
-			}
-        } 	
-	}
-	
-	//修改密碼
-	public function change_pwd(){
-		if(!$this->input->post()) redirect (base_url('login'));
-        $pwd = $this->input->post("new_pwd",true);
-        $hash = $this->input->post("hash",true);            
-		$data = array(
-			'password'      =>  password_hash($pwd, PASSWORD_BCRYPT, array('cost' => ENCRYPT_LENGTH)),
-			'session_key'   =>  ''
-		);
-		$this->db->where('session_key',$hash)
-				 ->update('account',$data);	
-		redirect (base_url('login'));	
-	}*/
-		
-	//測試
-	public function create($password){
-		echo password_hash($password, PASSWORD_BCRYPT, array('cost' => ENCRYPT_LENGTH));
-	}	
-	
+
+    public function creat_user()
+    {
+        $data["member"] = $this->member_model->get_member();
+        //echo json_encode($data["member"]);
+    		$this->logbook_template("login/creat_user",$data);
+
+    }
+    public function creat_user_chk()
+    {
+        $post_data = $this->input->post(null,true);
+        //echo json_encode($data["member"]);
+        $data["id"] = $post_data["uid"];
+        $data["pw"] = $post_data["pw"];
+        $data["member"] = $post_data["member"];
+        $data["clas"] = $post_data["clas"];
+        try {
+            $this->login_model->new_user($data);
+            echo "<script>";
+            echo "alert(\"OK\");";
+            echo "location.href ='".base_url('logbook')."'";
+            echo "</script>";
+        } catch (Exception $e) {
+            echo "<script>";
+            echo "alert(\"FAIL\");";
+            //redirect(base_url('login/creat_user'));
+            echo "location.href ='".base_url('login/creat_user')."'";
+            echo "</script>";
+        }
+
+
+
+
+    }
 }
 ?>

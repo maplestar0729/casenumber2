@@ -23,9 +23,7 @@
             </ul>
         </div>
         <div >
-					<?php
-					echo isset($year);
-					 ?>
+
         </div>
     </nav>
 
@@ -38,7 +36,7 @@
       for(i = d.getFullYear()-1911,j = 0 ;j<5 ; i-- , j++)
 			{
 				if($year == i )
-					$( "#year_menu" ).append('<li><a href="'+base_url+'home/index/'+i+'" style="color:blue;">'+i+'</a></li>' );
+					$( "#year_menu" ).append('<li><a href="'+base_url+'home/index/'+i+'" style="color:red;">'+i+'</a></li>' );
 				else
 					$( "#year_menu" ).append('<li><a href="'+base_url+'home/index/'+i+'"">'+i+'</a></li>' );
 //				$( "#year_menu" ).append('<li><a>2222222222</a></li>' );
@@ -46,12 +44,12 @@
 			for( ;i >=start_year  ; i-- )
 			{
 				if($year == i )
-					$( "#old_year_menu > ul" ).append('<li><a href="'+base_url+'home/index/'+i+'" style="color:blue;">'+i+'</a></li>' );
+					$( "#old_year_menu > ul" ).append('<li><a href="'+base_url+'home/index/'+i+'" style="color:red;">'+i+'</a></li>' );
 				else
 					$( "#old_year_menu > ul" ).append('<li><a href="'+base_url+'home/index/'+i+'">'+i+'</a></li>' );
 //				$( "#year_menu" ).append('<li><a>2222222222</a></li>' );
 			}
-			if($year != 0 && $year < d.getFullYear()- 1911 - 5)
+			if($year != 0 && $year <= d.getFullYear()- 1911 - 5)
 			{
 				$(".menu_children").show();
 			}

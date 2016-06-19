@@ -5,29 +5,70 @@
 }
 .casenoEdit{
     width: 99%;
+	font-family:標楷體;
+	font-size:20px;
+	color:blue;
     min-height:25px ;
     height:auto;
 }
 .casenoEdit:hover{
-    background-color: #0066FF;
-    color: white;
+    background-color: #CCDDFF;
+
+}
+.chk{
+  color: #666666;
+  font-size: 20px;
+}
+.NOClass{
+	color: red;
+	font-weight:bolder;
+	font-size:18px;
+}
+.chgToFormal{
+	color:red;
+	font-size:18px;
+}
+.btn-mystyle{
+	color: #fff;
+    background-color: #5E825E;
+    border-color: #4cae4c;
+}
+.tab-title{
+	font-family:標楷體;
+	font-size: 24px;
+}
+.line_5_style{
+  background-color:#CEFFCE;
 }
 </style>
 
 <script type="text/javascript" src="<?=base_url('public/plugin/bootstrap-table-master/src/extensions/export/bootstrap-table-export.js');?>" type="text/javascript"></script>
-<script type="text/javascript" src="<?=base_url('public/plugin/tableExport.jquery.plugin/tableExport.js');?>"></script>
+<script type="text/javascript" src="<?=base_url('public/js/tableExport.js');?>"></script>
 <script type="text/javascript" src="<?=base_url('public/plugin/tableExport.jquery.plugin/jspdf/libs/sprintf.js');?>"></script>
 <script type="text/javascript" src="<?=base_url('public/plugin/tableExport.jquery.plugin/jspdf/jspdf.js');?>"></script>
 <script type="text/javascript" src="<?=base_url('public/plugin/tableExport.jquery.plugin/jspdf/libs/base64.js');?>"></script>
-<div class="bs-docs-grid">
+<div class="btn btn-mystyle top_btn" id="tab_execel_export">
+	列印excel
+</div>
+<div class="bs-docs-grid" id="year_data_tab_div">
     <div id="toolbar" class="list-inline">
         <ul class="list-inline">
         <?php if(isset($year)){?>
-    	<li><a href="#addModal" data-toggle="modal"><button id="new" type="button" class="btn btn-primary">新增</button></a></li>
-        <li><h3><?=$year?>年案件編號表</h3></li>
+    	<li><a href="#addModal" data-toggle="modal"><button id="new" type="button" class="btn btn-mystyle">新增</button></a></li>
+        <li class="tab-title"><?=$year?>年案件編號表</li>
         <?php } else{?>
             <li>
+                <?php if($isOld == "old"){ ?>
+                    <h4>舊年份搜尋</h4>
+                <?php } else { ?>
+                    <h4>搜尋</h4>
+                <?php } ?>
+            </li>
+            <li>
+
+
                 <form action="<?=base_url('/search/index')?>"  method="GET" accept-charset="utf-8" >
+
                     <input type="text" name="str" value="<?=$search_str?>">
                     <button type="submit">搜尋</button>
                 </form>
@@ -38,7 +79,7 @@
 
 	<table id="year_data_tab"
             data-toggle="table"
-			data-toolbar="#toolbar"
+			      data-toolbar="#toolbar"
             data-search="true"
             data-show-refresh="true"
             data-show-columns="true"
@@ -47,48 +88,63 @@
             data-minimum-count-columns="2"
             data-show-pagination-switch="true"
             data-pagination="false"
-            data-pagination="true"
             data-sort-name="caseno"
             data-url="<?=base_url($get_case_tab_link)?>"
-			data-page-list="[10, 20, 25 , 50, 100, ALL]"
+		        data-page-list="[10, 20, 25 , 50, 100, ALL]"
             data-tab-name='caseindex_caseno'
             data-show-footer="false"
+            data-row-style="rowStyle"
     	>
         <thead>
 
 	        <tr>
-           		<th data-field='id' data-width='50'	data-visible="false">id</th>
-           		<th data-field='edit' data-width='30' data-visible="false" data-formatter="editFormatter" data-events="editEvents">編輯</th>
-           		<th data-field='caseno' data-width='20' data-sortable="true" data-filter-control="true">案件編號</th>
-           		<th data-field='name' data-width='50'  data-formatter="nameFormatter" data-events="nameEvents"  data-sortable="true" data-filter-control="true" data-editable="true"  >案件名稱</th>
+           		<th data-field='id' data-width='10'	data-visible="false" >id</th>
+           		<th data-field='edit' data-width='10' data-visible="false" data-formatter="editFormatter" data-events="editEvents">編</th>
+           		<th data-field='caseno' data-width='50' data-cell-style="NOStyle" data-sortable="true" data-filter-control="true" >NO</th>
+           		<th data-field='name' data-width='350'  data-formatter="nameFormatter" data-events="nameEvents"  data-sortable="true" data-filter-control="true" data-editable="true"  >案件名稱</th>
         <?php
 			for($i=0; $title_sort[$i]['title_name'] != ""; $i++)
 			{
 			    //echo "<th data-field='title".($title_sort[$i]['id']+1)."_state' data-cell-style='statusStyle'  data-width='5'></th>";
-			    echo "<th data-field='title".($title_sort[$i]['id']+1)."' data-formatter='statusFormatter' data-events='statusEvents' data-width='80'>".$title_sort[$i]['title_name']."日期</th>";
+			    echo "<th data-field='title".($title_sort[$i]['id']+1)."' data-formatter='statusFormatter' data-events='statusEvents' data-width='120'>".$title_sort[$i]['title_name']."</th>";
 
 			}
 			?>
             </tr>
         </thead>
-        </table>
+        <tfoot>
+	        <tr>
+           		<th >NO</th>
+           		<th >案件名稱</th>
+              <?php
+          			for($i=0; $title_sort[$i]['title_name'] != ""; $i++)
+          			{
+          			    //echo "<th data-field='title".($title_sort[$i]['id']+1)."_state' data-cell-style='statusStyle'  data-width='5'></th>";
+          			    echo "<th >".$title_sort[$i]['title_name']."</th>";
+
+          			}
+      			?>
+            </tr>
+        </tfoot>
+      </table>
 
 </div>
 <div>
 
 
-            <div style="width:60%;min-width: 450px;">
-            <div id="toolbar_undecided">
-                <ul class="list-inline">
-                <?php if(isset($year)){?>
-                <li><a href="#addModal_undecided" data-toggle="modal"><button id="new" type="button" class="btn btn-primary">新增</button></a></li>
-                <li><h3><?=$year?>年尚未編號案件表</h3></li>
-                <?php } else{?>
+            <div style="width:60%;min-width: 400px;" class="list-inline">
+                <div id="toolbar_undecided">
+                    <ul class="list-inline">
+                    <?php if(isset($year)){?>
+                    <li><a href="#addModal_undecided" data-toggle="modal"><button id="new" type="button" class="btn btn-mystyle">新增</button></a></li>
+                    <li class="tab-title"><?=$year?>年尚未編號案件表</li>
+                    <?php } else{?>
 
 
-                <?php }?>
-                </ul>
-            </div>
+                    <?php }?>
+                    </ul>
+                </div>
+                <div >
             <table id="year_undecided"
                     data-toggle="table"
                     data-toolbar="#toolbar_undecided"
@@ -98,23 +154,30 @@
                     data-show-export="true"
                     data-minimum-count-columns="2"
                     data-show-pagination-switch="true"
-                    data-pagination="true"
+					data-pagination="false"
+					data-sort-name="id"
                     data-id-field="caseno"
                     data-url="<?=base_url($search_case_tab_undecided_link)?>"
                     data-page-list="[10, 20, 25 , 50, 100, ALL]"
                     data-tab-name='caseindex_caseno_undecided'
+                    data-row-style="rowStyle"
+                    style="width:550px;min-width: 550px;"
+
                 >
                 <thead>
 
                     <tr>
-                        <th data-field='id' data-width='50'	data-visible="false">id</th>
-                        <th data-field='year' data-width='20' data-sortable="true" data-filter-control="true">年</th>
-                        <th data-field='name' data-width='50'  data-formatter="nameFormatter" data-events="nameEvents"  data-sortable="true" data-filter-control="true" data-editable="true"  >案件名稱</th>
-                        <th data-field='edit' data-width='30' data-formatter="undecidedEditFormatter" data-events="undecidedEditEvents">編輯</th>
+                        <th data-field='id' data-width='50'	data-visible="false" data-sortable="true">id</th>
+                        <th data-field='year' data-width='50' data-cell-style="NOStyle" data-cell-style="undecided_tab_year" data-sortable="true" data-filter-control="true">年</th>
+                        <th data-field='name' data-width='350'  data-formatter="nameFormatter" data-events="nameEvents"  data-sortable="true" data-filter-control="true" data-editable="true"  >案件名稱</th>
+                        <th data-field='edit' data-width='50' data-formatter="undecidedEditFormatter" data-events="undecidedEditEvents">給編號</th>
+                        <th data-field='del' data-width='50' data-formatter="undecidedDelFormatter" data-events="undecidedDelEvents">刪</th>
 
                     </tr>
                 </thead>
                 </table>
+            </div>
+
             </div>
     	<div class="modal fade " id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" data-keyboard="false" aria-hidden="true">
     		<div class="modal-dialog">
@@ -141,10 +204,19 @@
     								<input type="text" class="form-control" name="case_name" id="case_name"/>
     							</div>
     						</div>
+                            <div class="form-group col-sm-12" >
+                                <label class="col-sm-3 control-label">預設選項</label>
+                                <div class="col-sm-9">
+                                    <select name="case_title" class="form-control">
+                                        <option value="1">不管控</option>
+                                        <option value="0">進度點記錄</option>
+                                    </select>
+                                </div>
+                            </div>
     						<div class="form-group col-sm-12" >
     							<div class="col-sm-offset-3 col-sm-3">
 
-    								 <a  id="save" class="btn btn-primary" >儲存</a>
+    								 <a  id="save" class="btn btn-mystyle" >儲存</a>
     							</div>
     							<div class="col-sm-6">
     								 <div id="register_error" class="msg"></div>
@@ -156,7 +228,7 @@
     			</div>
     		</div>
     	</div>
-        <div class="modal fade " id="addModal_undecided" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" data-keyboard="false" aria-hidden="true">
+      <div class="modal fade " id="addModal_undecided" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" data-keyboard="false" aria-hidden="true">
     		<div class="modal-dialog">
     			<div class="modal-content">
     				<div class="modal-header">
@@ -182,7 +254,7 @@
     						<div class="form-group col-sm-12" >
     							<div class="col-sm-offset-3 col-sm-3">
 
-    								 <button type="submit" class="btn btn-primary" >儲存</button>
+    								 <button type="submit" class="btn btn-mystyle" >儲存</button>
     							</div>
     							<div class="col-sm-6">
     								 <div id="register_error" class="msg"></div>
@@ -231,7 +303,7 @@
                             <input type="hidden" id="edit_case_id" name="id" />
     						<div class="form-group col-sm-12" >
     							<div class="col-sm-offset-3 col-sm-3">
-                                	<button type="submit" class="btn btn-primary" >儲存</button>
+                                	<button type="submit" class="btn btn-mystyle" >儲存</button>
     							</div>
     							<div class="col-sm-6">
     								 <div id="register_error" class="msg"></div>
@@ -242,7 +314,7 @@
     			</div>
     		</div>
     	</div>
-        <div class="modal fade " id="delModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" data-keyboard="false" aria-hidden="true">
+      <div class="modal fade " id="delModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" data-keyboard="false" aria-hidden="true">
     		<div class="modal-dialog" style="width:200px">
     			<div class="modal-content">
     				<div class="modal-header">
@@ -254,7 +326,7 @@
                         <input type="hidden" id="tab_name" name="tab_name" />
     					<div class="form-group col-sm-12" >
     						<div class=" col-sm-3">
-                            	<button type="submit" class="btn btn-success del_btn" >刪除</button>
+                            	<button type="submit" class="btn btn-mystyle del_btn" >刪除</button>
     						</div>
                             <div class=" col-sm-1">
 
@@ -268,6 +340,10 @@
     		</div>
     	</div>
 </div>
+<div style="display:none">
+  <table id="year_all_data">
+  </table>
+</div>
 <script>
 
 title_sort = <?=json_encode($title_sort)?>;
@@ -277,6 +353,25 @@ var replaceWith = $('<input id="temp_name_input" name="temp" style="width:80%" /
 var save_ok_With = $('<a class="glyphicon glyphicon-ok musPick name_save_ok"  aria-hidden="true"> </a>');
 var remove_With = $('<a class="glyphicon glyphicon-remove musPick name_cancel"  aria-hidden="true"></a>');
 var connectWith = $('input[name="hiddenField"]');
+function NOStyle(value, row, index)
+{
+	return {
+            classes: "NOClass"
+        };
+}
+function rowStyle(row, index)
+{
+  if ((index+1) % 5 == 0 ) {
+      return {
+          classes: "line_5_style"
+      };
+  }
+  return {};
+}
+
+function footerFormatter(value, row, index,a,b)  {
+    return "test";
+}
 
 function nameFormatter(value, row, index){
     return [
@@ -368,9 +463,9 @@ window.nameEvents = {
 //編輯此筆
 function editFormatter(value, row, index) {
     return [
-        '<a  href="#editModal" data-toggle="modal" class="edits ml10" href="javascript:void(0)" title="編輯">',
+        /*'<a  href="#editModal" data-toggle="modal" class="edits ml10" href="javascript:void(0)" title="編輯">',
 			'<img class="edit" src="'+base_url+'public/img/edit-icon.png'+'">',
-        '</a>',
+        '</a>',*/
         '<a  href="#delModal" data-toggle="modal" class="del_case ml10" href="javascript:void(0)" title="刪除">',
 			'<i class="glyphicon glyphicon-remove del_case"></i>',
         '</a>'
@@ -393,20 +488,49 @@ window.editEvents = {
         $("#delModal #tab_name").val("caseindex_caseno");
     },
 };
+function get_date_html_str(data)
+{
+	var tmp_str = ""
+	if(data.status == 1 ) {
+	  tmp_str += '<div align="center">';
+	  tmp_str += '<a class="musPick"><i data-status="'+data.status+'" class="glyphicon glyphicon-ban-circle chk" data-title-id="'+data.id+'" data-title="'+data.title+'" aria-hidden="true"></i></a>';
+	  tmp_str += '</div>';
 
+	}else if(data.status == 3){
+		iCodeColor = "style='color:	red;'";
+		tmp_str += '<div class="row"><div class="col-md-1"><i data-status="'+data.status+'" data-title-id="'+data.id+'"  class="glyphicon glyphicon-star chk musPick" '+iCodeColor+' data-title="'+data.title+'" aria-hidden="true"></i></div>';
+		tmp_str += " <div data-title-id='"+data.id+"' data-title='"+data.title+"' class='row_date musPick col-md-9'></div>";
+		tmp_str += '</div>';
+	}
+	else
+	{
+		if(data.date)
+		{
+			iCodeColor = "style='color:#666666;'";
+			iCodeClass = "ban";
+		}else{
+			iCodeColor = "style='color:	#00FF00;'";
+			iCodeClass = "chk";
+		}
+		tmp_str += '<div class="row">';
+		tmp_str += '<div class="col-md-1"><i data-status="'+data.status+'" data-title-id="'+data.id+'"  class="glyphicon glyphicon-unchecked '+iCodeClass+' musPick" '+iCodeColor+' data-title="'+data.title+'" aria-hidden="true"></i></div>';
+		if(data.status == 0){
+		  tmp_str += " <div data-title-id='"+data.id+"' data-title='"+data.title+"' class='row_date musPick col-md-9 date_done' >"+data.date+"</div>";
+		}else{
+		  tmp_str += " <div data-title-id='"+data.id+"' data-title='"+data.title+"' class='row_date musPick col-md-9 date_done_befor' >"+data.date+"</div>";
+		}
+		tmp_str += '</div>';
+	}
+	return tmp_str;
+}
 function statusFormatter(value, row, index) {
     //debugger;
-    title_state = row[this.field + "_state" ];
-    if (title_state == 1) {
-        sCode = '<a class="musPick"><span class=" glyphicon glyphicon-ban-circle chk" data-title="'+this.field+'" aria-hidden="true"></span></a>';
-    } else {
-        sCode = '<div class="row"><div class="col-md-1"><a class="musPick"><span class="glyphicon glyphicon-unchecked ban" data-title="'+this.field+'" aria-hidden="true"></span></a></div>';
-        if(title_state == 0){
-            sCode += " <div data-title-id='"+row.id+"' data-title='"+this.field+"' class='row_date musPick col-md-9 date_done' >" + value + "</div></div>";
-        } else {
-            sCode += " <div data-title-id='"+row.id+"' data-title='"+this.field+"' class='row_date musPick col-md-9 date_done_befor' >" + value + "</div></div>";
-        }
-    }
+	tmp_data = new Object();
+    tmp_data.status = row[this.field + "_state" ];
+	tmp_data.id = row.id;
+	tmp_data.title = this.field;
+	tmp_data.date = value;
+	sCode = get_date_html_str(tmp_data);
     return [sCode].join('');
 }
 var calset={
@@ -419,15 +543,21 @@ var calset={
             id = this.formname.attr("data-title-id");
             //d = this.formname.val();
             d_str = this.formname.html();
+            if(this.formname.css('color') == 'rgb(119, 0, 119)')
+            {
+                data_status = 0;
+            }else{
+                data_status = 2;
+            }
             data = { 'id' : id,
                    'title' : val_name,
-                   'status' : 0,
+                   'status' : data_status,
                    'date' : d_str,
                    'year' : $year
             }
             //debugger;
 
-            update_status(data);
+            update_status(data,this.formname.parent().parent());
 
         }
     };
@@ -440,90 +570,113 @@ $(document).on("click",".row_date", function(e){
 	}
     moncalendar.picksel($(this),calset);
 });
-window.statusEvents = {
-    'click .chk': function (e, value, row, index) {
-        val_name = $(this).attr("data-title");
-        id = row.id;
-        d = new Date();
-        d_str = (d.getFullYear() - 1911) + "/" + (d.getMonth() + 1) + "/" + d.getDate();
-        data = { 'id' : id,
-               'title' : val_name,
-               'status' : 0,
-               'date' : d_str,
-               'year' : $year
-        }
-        update_status(data);
-    },
-    'click .ban': function (e, value, row, index) {
-        val_name = $(this).attr("data-title");
-        id = row.id;
-        data = { 'id' : id,
-               'title' : val_name,
-               'status' : 1,
-               'date' : "",
-               'year' : $year
 
-        }
-        update_status(data);
-    },
-    'dblclick .row_date' :function (e, value, row, index){
-        var temp_row_date = $(this);
-        var data = new Object();
-        if($(this).css('color') == 'rgb(255, 0, 0)')
-        {
-            title = $(this).attr('data-title')+"_state";
-            data['id'] = row.id;
-            data["set_data"] = new Object();
-            data["set_data"][title] = 0;
-            data["tab_name"] = $(this).parent().parent().parent().parent().parent().attr("data-tab-name")
-            $.ajax({
-                  url:base_url+"home/update_caseno_data",
-                  data:data,
-                  dataType:"JSON",
-                  type:"POST",
-                  success:function(){
-                      //location.reload();
-                      temp_row_date.css({color:'rgb(0, 0, 255)'});
-                  }
+function update_status(data,tab_element){
+    //tab_element.html("");
+    $.ajax({
+          url:base_url+"home/update_status",
+          data:data,
+          dataType:"JSON",
+          type:"POST",
+          success:function(text,e,obj){
+              sCode = get_date_html_str(data);
+              $( tab_element).html(sCode);
+              //setTimeout(function(){
 
-            });
+              //},1000);
+          }
 
-        }else if($(this).css('color') == 'rgb(0, 0, 255)')
-        {
-            title = $(this).attr('data-title')+"_state";
-            data['id'] = row.id;
-            data["set_data"] = new Object();
-            data["set_data"][title] = 2;
-            data["tab_name"] = $(this).parent().parent().parent().parent().parent().attr("data-tab-name")
-            $.ajax({
-                  url:base_url+"home/update_caseno_data",
-                  data:data,
-                  dataType:"JSON",
-                  type:"POST",
-                  success:function(){
-                      //location.reload();
-                      temp_row_date.css({color:'rgb(255, 0, 0)'});
-                  }
+    });
+}
+$(document).on("click",".chk",function (e) {
+	if($(this).attr("data-status") == 0)
+	{
+		tmp_status = 3;
+	}else if($(this).attr("data-status") == 1)
+	{
+		tmp_status = 0;
+	}else if($(this).attr("data-status") == 3)
+	{
+		tmp_status = 1;
+	}
 
-            });
-        }
+    val_name = $(this).attr("data-title");
+    id = $(this).attr("data-title-id");
+    d = new Date();
+    //d_str = (d.getFullYear() - 1911) + "/" + (d.getMonth() + 1) + "/" + d.getDate();
+    data = { 'id' : id,
+           'title' : val_name,
+           'status' : tmp_status,
+           'date' : "",
+           'year' : $year
     }
+    update_status(data,$(this).parent().parent().parent());
+});
+$(document).on("click",".ban", function (e, value, row, index) {
+    val_name = $(this).attr("data-title");
+    id = $(this).attr("data-title-id");
+    data = { 'id' : id,
+           'title' : val_name,
+           'status' : 1,
+           'date' : "",
+           'year' : $year
+
+    }
+    update_status(data,$(this).parent().parent().parent());
+});
+$(document).on("dblclick",".row_date",function (e){
+    var temp_row_date = $(this);
+    var data = new Object();
+    title = $(this).attr('data-title')+"_state";
+    data['id'] = $(this).attr("data-title-id");
+    data["set_data"] = new Object();
+    data["tab_name"] = $(this).parent().parent().parent().parent().parent().attr("data-tab-name");
+    if($(this).css('color') == 'rgb(119, 0, 119)')
+    {
+
+        data["set_data"][title] = 0;
+
+        $.ajax({
+              url:base_url+"home/update_caseno_data",
+              data:data,
+              dataType:"JSON",
+              type:"POST",
+              success:function(){
+                  //location.reload();
+                  temp_row_date.css({color:'rgb(0, 0, 255)'});
+              }
+
+        });
+
+    }else if($(this).css('color') == 'rgb(0, 0, 255)')
+    {
+
+        data["set_data"][title] = 2;
+        $.ajax({
+              url:base_url+"home/update_caseno_data",
+              data:data,
+              dataType:"JSON",
+              type:"POST",
+              success:function(){
+                  //location.reload();
+                  temp_row_date.css({color:'rgb(119, 0, 119)'});
+              }
+
+        });
+    }
+});
+window.statusEvents = {
+
+
 };
 
-
-function undecidedEditFormatter(){
+function undecidedDelFormatter(){
     uCode = "";
-    uCode += "<a href='#addModal' data-toggle='modal' class='glyphicon glyphicon-share chgToFormal' ></a> ";
-    uCode += "<a  class='glyphicon glyphicon-remove delUndecided' ></a>";
+    uCode += "<a  class='glyphicon glyphicon-remove delUndecided musPick' ></a>";
     return uCode;
 }
 
-window.undecidedEditEvents = {
-    "click .chgToFormal" : function (e, value, row, index) {
-        $("#case_code_year").val(row.year);
-        $("#case_name").val(row.name);
-        $("#undecided_tab_id").val(row.id);
-    },
+window.undecidedDelEvents = {
     "click .delUndecided" : function (e, value, row, index) {
         if(confirm("是否刪除"))
         {
@@ -544,22 +697,28 @@ window.undecidedEditEvents = {
     },
 }
 
-
-function update_status(data){
-    $.ajax({
-          url:base_url+"home/update_status",
-          data:data,
-          dataType:"JSON",
-          type:"POST",
-          success:function(){
-              //location.reload();
-
-          }
-
-    });
-
+function undecidedEditFormatter(){
+    uCode = "";
+    uCode += "<a href='#addModal' data-toggle='modal' class='glyphicon glyphicon-share chgToFormal' ></a> ";
+//    uCode += "<a  class='glyphicon glyphicon-remove delUndecided' ></a>";
+    return uCode;
 }
 
+window.undecidedEditEvents = {
+    "click .chgToFormal" : function (e, value, row, index) {
+        $("#case_code_year").val(row.year);
+        $("#case_name").val(row.name);
+        $("#undecided_tab_id").val(row.id);
+    }
+}
+
+
+function undecided_tab_year()
+{
+  return  {
+            classes: "undecided_tab_year"
+        };
+}
 
 <?php
 	if( isset($new_case_save_pass))
@@ -570,11 +729,12 @@ $(document).ready(function(e) {
 
 	if(typeof(new_case_save_pass) != 'undefined')
 	{
+		debugger;
 		if(new_case_save_pass == false)
 		{
-			alert("儲存失敗");
+			alert(new_case_save_pass);
 		}else {
-			alert("儲存成功");
+			alert(new_case_save_pass);
 		}
 	}
 
@@ -583,10 +743,7 @@ $(document).ready(function(e) {
 	{
 		$(".case_modal_year").append($("<option></option>").attr("value", i).text( (i >=100)? padLeft(i-100,2) : i));
 	}
-    if($year)
-    {
-        $(".case_modal_year").val($year);
-    }
+
 	$(document).on("click", "#save", function() {
 		if(checkValEng($("#case_code_en").val()) == false)
 		{
@@ -633,13 +790,39 @@ $(document).ready(function(e) {
         // Retrieve
 
     }
-    if($("#year_data_tab th").length > 7)
+    if($("#year_data_tab th").length > 2)
     {
-        nowWidth = $("#year_data_tab").width();
-        x = $("#year_data_tab th").length - 7;
-        $("#year_data_tab").width(nowWidth + x*100);
+        nowWidth = 50+350;
+        x = $("#year_data_tab thead th").length - 2;
+        $("#year_data_tab").width(nowWidth + x * 120);
     }
-
+  	   $("#new").click(function(){
+  		$("#new_data_frm")[0].reset();
+  		if($year)
+  		{
+  			$(".case_modal_year").val($year);
+  		}
+  	});
+    if($year)
+    {
+        $(".case_modal_year").val($year);
+    }
+    $("#tab_execel_export").on("click",year_all_data_export);
+	$(".case_title").html("<h1>案件編號系統</h1>");
 });
+
+
+
+function year_all_data_export()
+{
+	top_tab_data = $("#year_data_tab").html();
+	bot_tab_data = $("#year_undecided tbody").html();
+	$("#year_all_data").html(top_tab_data).children("tbody").append(bot_tab_data);
+	$("#year_all_data .undecided_tab_year").html("");
+	$("#year_all_data").parent().show();
+	$("#year_all_data").tableExport({type:'excel',escape:'false'})
+	$("#year_all_data").parent().hide();
+
+}
 
 </script>
