@@ -55,7 +55,7 @@
       </div>
     </div>
   </div>
-</form>-->
+</form>
 <form id="search_frm" method="get" action="<?=base_url('logbook')?>"  accept-charset="utf-8" >
   <div class="newlog">
     <?php if($this->session->userdata('case_number')["class"] == 1) {?>
