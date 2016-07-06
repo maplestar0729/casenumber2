@@ -7,13 +7,13 @@ class logbook_model extends CI_Model{
 	public function creat_log($data){
 
 		try
-    {
-      $ans = $this->db->insert('logbook_log', $data);
+		{
+		$ans = $this->db->insert_batch('logbook_log', $data);
 
-    } catch (Exception $e){
-      $ans = false;
-    }
-    return $ans;
+		} catch (Exception $e){
+		$ans = false;
+		}
+		return $ans;
 	}
 	public function get_prev_log($search_data){
 
@@ -68,6 +68,22 @@ class logbook_model extends CI_Model{
 		return $ans;
 	}
 
+	public function get_log_content()
+	{
+		try
+		{
+		$ans = $this->db->select("content")
+						->from("logbook_log")
+						->order_by("logbook_log.date desc,NO desc")
+						->group_by("content")
+						->limit(20)
+						->get()->result_array();
+
+		} catch (Exception $e){
+		$ans = false;
+		}
+		return $ans;
+	}
 
 
 }

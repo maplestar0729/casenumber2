@@ -168,7 +168,7 @@
 
                     <tr>
                         <th data-field='id' data-width='50'	data-visible="false" data-sortable="true">id</th>
-                        <th data-field='year' data-width='50' data-cell-style="NOStyle" data-cell-style="undecided_tab_year" data-sortable="true" data-filter-control="true">年</th>
+                        <th data-field='year' data-width='50' data-cell-style="NOStyle" data-sortable="true" data-filter-control="true">年</th>
                         <th data-field='name' data-width='350'  data-formatter="nameFormatter" data-events="nameEvents"  data-sortable="true" data-filter-control="true" data-editable="true"  >案件名稱</th>
                         <th data-field='edit' data-width='50' data-formatter="undecidedEditFormatter" data-events="undecidedEditEvents">給編號</th>
                         <th data-field='del' data-width='50' data-formatter="undecidedDelFormatter" data-events="undecidedDelEvents">刪</th>
@@ -779,7 +779,7 @@ $(document).ready(function(e) {
     });
     if (page_name == "case_show" && typeof(Storage) !== "undefined" ) {
     // Store
-        if(localStorage.getItem("lastyear")  != "null" && $year == 0)
+        if(localStorage.getItem("lastyear") && $year == 0)
         {
                 temp_to_year = localStorage.getItem("lastyear");
                 location.href = base_url+"home/index/" + temp_to_year;

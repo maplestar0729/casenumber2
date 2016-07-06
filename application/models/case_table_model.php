@@ -19,7 +19,8 @@ class case_table_model extends CI_Model{
 		//$start_year = $this->config->load('start_year');
 			if($year == 0){
 				$this->db->select('caseno,name')
-					 ->from('caseindex_caseno');
+					 ->from('caseindex_caseno')
+					 ->order_by("year desc,caseno desc");
 			}else{
 				$this->db->select('caseno,name')
 					 ->from('caseindex_caseno')
