@@ -9,7 +9,7 @@ class title_edit extends MY_Controller{
 
     public function index(){
       $data["year"] = "title_edit";
-		  $this->template("title_edit",$data);
+		  $this->caseindex_template("title_edit",$data);
     }
 
     public function get_title_sort(){

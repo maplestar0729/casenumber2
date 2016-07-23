@@ -23,6 +23,7 @@ class MY_Controller extends CI_Controller {
 			$data['user_class']=$this->session->userdata('case_number')["class"];
 
 			//echo json_encode($this->session->userdata('case_number'));
+			$data['leftmenu'] = $this->load->view('logbook/template/leftmenu', $data, TRUE);
 			$data['top'] = $this->load->view('logbook/template/top', $data, TRUE);
 			$data['body'] = $this->load->view($page_name, $data, TRUE);
 			$this->load->view('logbook/template/layout', $data);

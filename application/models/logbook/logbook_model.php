@@ -76,7 +76,7 @@ class logbook_model extends CI_Model{
 						->from("logbook_log")
 						->order_by("logbook_log.date desc,NO desc")
 						->group_by("content")
-						->limit(20)
+						->limit(30)
 						->get()->result_array();
 
 		} catch (Exception $e){
@@ -85,6 +85,20 @@ class logbook_model extends CI_Model{
 		return $ans;
 	}
 
+	public function get_log_today_leng()
+	{
+		try
+		{
+			$ans = $this->db->select("SUM(`length`) as today_leng ")
+						->from("logbook_log")
+						->where("date",(date("Y") - 1911).date("/m/d"))
+						->get()->result_array()[0]["today_leng"];
+
+		} catch (Exception $e){
+			$ans = false;
+		}
+		return $ans;
+	}
 
 }
 ?>

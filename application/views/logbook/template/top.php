@@ -1,3 +1,9 @@
+<style>
+	.user_name{
+		font-size: 30px;
+	  font-family:DFKai-sb;
+	}
+</style>
 	<header id="header" class="navbar navbar-static-top">
 		<div class="navbar-header">
 			<a type="button" id="button-menu" class="pull-left"><i class="fa fa-indent fa-lg"></i></a>
@@ -31,7 +37,7 @@
 				</ul>
 			</li> -->
 			<!-- <li><a href="<?=str_replace("/admin/","",base_url());?>" target="_blank"><span class="hidden-xs hidden-sm hidden-md">返回前台</span> <i class="glyphicon glyphicon-globe"></i></a></li> -->
-			<li><a><span class="hidden-xs hidden-sm hidden-md"><?=$user_name?>您好</span><i class="fa fa-sign-out fa-lg"></i></a></li>
+			<li><a><span class="user_name hidden-xs hidden-sm hidden-md"><?=$user_name?>您好</span><i class="fa fa-sign-out fa-lg"></i></a></li>
 			<?php if($this->session->userdata["case_number"]["class"] == 1) {?>
 			<li><a href="<?=base_url('login/creat_user');?>"><span class="hidden-xs hidden-sm hidden-md">新增帳號</span><i class="fa fa-sign-out fa-lg"></i></a></li>
 			<?php } ?>

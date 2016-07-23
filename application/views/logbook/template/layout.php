@@ -34,6 +34,7 @@
 	<div id="container">
 
 		<?=$top;?>
+		<?=$leftmenu;?>
 		<!-- <div class="case_title">案件編號系統</div> -->
 
 
