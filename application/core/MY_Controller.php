@@ -5,13 +5,23 @@ class MY_Controller extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		date_default_timezone_set('Asia/Taipei');
 	}
 
 	public function caseindex_template($page_name, $data=[])
 	{
-		$data['leftmenu'] = $this->load->view('caseindex/templates/leftmenu', $data, TRUE);
-		$data['body'] = $this->load->view("caseindex/".$page_name, $data, TRUE);
-		$this->load->view('caseindex/templates/layout', $data);
+		if($this->session->userdata('case_number')["logged_in"])
+		{
+			$data['user_name']=$this->session->userdata('case_number')["user_name"];
+			$data['user_class']=$this->session->userdata('case_number')["class"];
+			$data['leftmenu'] = $this->load->view('caseindex/templates/leftmenu', $data, TRUE);
+			$data['top'] = $this->load->view('templates/top', $data, TRUE);
+			$data['body'] = $this->load->view("caseindex/".$page_name, $data, TRUE);
+			$this->load->view('caseindex/templates/layout', $data);}
+		else
+		{
+			redirect(base_url('login'));
+		}
 	}
 	//顯示template
 	public function logbook_template($page_name, $data=[])
@@ -23,10 +33,10 @@ class MY_Controller extends CI_Controller {
 			$data['user_class']=$this->session->userdata('case_number')["class"];
 
 			//echo json_encode($this->session->userdata('case_number'));
-			$data['leftmenu'] = $this->load->view('logbook/template/leftmenu', $data, TRUE);
-			$data['top'] = $this->load->view('logbook/template/top', $data, TRUE);
+			$data['leftmenu'] = $this->load->view('logbook/templates/leftmenu', $data, TRUE);
+			$data['top'] = $this->load->view('templates/top', $data, TRUE);
 			$data['body'] = $this->load->view($page_name, $data, TRUE);
-			$this->load->view('logbook/template/layout', $data);
+			$this->load->view('logbook/templates/layout', $data);
 		}
 		else
 		{

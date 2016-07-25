@@ -22,9 +22,7 @@
     <script src="<?=base_url('public/plugin/bootstrap-table-master/dist/bootstrap-table.js');?>" type="text/javascript"></script>
     <script src="<?=base_url('public/plugin/bootstrap-table-master/dist/locale/bootstrap-table-zh-TW.min.js');?>" type="text/javascript"></script>
 
-    <script src="<?=base_url('public/plugin/JQueryDatePickerTW-master/JQueryDatePickerTW.js');?>" type="text/javascript"></script>
-
-		<link href="<?=base_url('public/css/stylesheet.css');?>" rel="stylesheet" >
+    <link href="<?=base_url('public/css/stylesheet.css');?>" rel="stylesheet" >
 	<link href="<?=base_url('public/css/mycss.css');?>" rel="stylesheet" >
 	<script src="<?=base_url('public/js/myjs.js');?>" type="text/javascript"></script>
 

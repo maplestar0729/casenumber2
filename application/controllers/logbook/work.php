@@ -1,6 +1,6 @@
 ﻿<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class logbook extends MY_Controller{
+class work extends MY_Controller{
 
     public function __construct(){
         parent::__construct();
@@ -184,16 +184,18 @@ class logbook extends MY_Controller{
     }
 
     public function get_log_content(){
-      $rtn = $this->logbook_model->get_log_content();
-      echo json_encode($rtn);
+        $rtn = $this->logbook_model->get_log_content();
+        echo json_encode($rtn);
     }
     public function get_log_today_leng()
     {
-        $rtn = $this->logbook_model->get_log_today_leng();
-        $rtn = str_pad($rtn,6,'0',STR_PAD_LEFT);
-        $rtn = substr( $rtn , 0 , 4 );
-        $rtn = substr_replace($rtn,":",2,0);
-        $rtn_data["today_work_time"] = $rtn;
+        $uid = $this->session->userdata('case_number')["user_id"];
+        $userdata = $this->login_model->get_user_uid($uid);
+        $rtn = $this->logbook_model->get_log_today_leng($userdata[0]["member"]);
+        // $rtn = str_pad($rtn,6,'0',STR_PAD_LEFT);
+        $rtn = substr( $rtn , 0 , 5 );
+        // $rtn = substr_replace($rtn,":",2,0);
+        // $rtn_data["today_work_time"] = $rtn;
         echo json_encode($rtn);
     }
 }

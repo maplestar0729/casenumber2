@@ -34,7 +34,7 @@ class logbook_head_model extends CI_Model{
 		return $ans;
 	}
 
-	public function uptade_head($data){
+	public function update_head($data){
 		try
 		{
 			$ans = $this->db->where('uid',$data["uid"])->update("logbook_head", $data);

@@ -79,7 +79,7 @@
 
 	<table id="year_data_tab"
             data-toggle="table"
-			      data-toolbar="#toolbar"
+            data-toolbar="#toolbar"
             data-search="true"
             data-show-refresh="true"
             data-show-columns="true"
@@ -88,9 +88,10 @@
             data-minimum-count-columns="2"
             data-show-pagination-switch="true"
             data-pagination="false"
-            data-sort-name="caseno"
+            data-sort-name="id"
+            data-sort-order="desc"
             data-url="<?=base_url($get_case_tab_link)?>"
-		        data-page-list="[10, 20, 25 , 50, 100, ALL]"
+            data-page-list="[10, 20, 25 , 50, 100, ALL]"
             data-tab-name='caseindex_caseno'
             data-show-footer="false"
             data-row-style="rowStyle"
@@ -98,7 +99,7 @@
         <thead>
 
 	        <tr>
-           		<th data-field='id' data-width='10'	data-visible="false" >id</th>
+           		<th data-field='id' data-width='10' data-sortable="true" data-visible="false" >id</th>
            		<th data-field='edit' data-width='10' data-visible="false" data-formatter="editFormatter" data-events="editEvents">編</th>
            		<th data-field='caseno' data-width='50' data-cell-style="NOStyle" data-sortable="true" data-filter-control="true" >NO</th>
            		<th data-field='name' data-width='350'  data-formatter="nameFormatter" data-events="nameEvents"  data-sortable="true" data-filter-control="true" data-editable="true"  >案件名稱</th>
@@ -779,7 +780,7 @@ $(document).ready(function(e) {
     });
     if (page_name == "case_show" && typeof(Storage) !== "undefined" ) {
     // Store
-        if(localStorage.getItem("lastyear") && $year == 0)
+        if(localStorage.getItem("lastyear") && $year == 0 && localStorage.getItem("lastyear") !=0)
         {
                 temp_to_year = localStorage.getItem("lastyear");
                 location.href = base_url+"home/index/" + temp_to_year;

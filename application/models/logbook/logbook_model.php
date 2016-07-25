@@ -85,15 +85,19 @@ class logbook_model extends CI_Model{
 		return $ans;
 	}
 
-	public function get_log_today_leng()
+	public function get_log_today_leng($member)
 	{
 		try
 		{
-			$ans = $this->db->select("SUM(`length`) as today_leng ")
+			$ans = $this->db->select("SEC_TO_TIME( SUM( TIME_TO_SEC(`length`))) as today_leng ")
 						->from("logbook_log")
+						->where("member",$member)
 						->where("date",(date("Y") - 1911).date("/m/d"))
 						->get()->result_array()[0]["today_leng"];
-
+			if($ans == null)
+			{
+				$ans = 0;
+			}
 		} catch (Exception $e){
 			$ans = false;
 		}

@@ -16,14 +16,14 @@ class Login extends MY_Controller{
   		}
   		else
   		{
-  			redirect(base_url('logbook'));
+  			redirect(base_url('logbook/index'));
   		}
     }
 
   	//登入檢查
   	public function login_check(){
   		if( $this->session->userdata('case_number')["logged_in"] ){		//已登入
-              redirect( base_url('logbook') );
+              redirect( base_url('logbook/index') );
           }else{
   			//驗證碼驗證
   			// $this->load->library('securimage/securimage');

@@ -29,7 +29,7 @@
 		width:100%;
 	}
 	#today_logbook_frm #today_logbook{
-		padding-left:160px
+		padding-left:180px
 	}
 	input{
 		color: black;
@@ -40,8 +40,15 @@
         color: black;
         font-size: 20px;
     }
+    .line_5_style{
+        background-color:#CEFFCE;
+    }
 </style>
-
+<script type="text/javascript" src="<?=base_url('public/plugin/bootstrap-table-master/src/extensions/export/bootstrap-table-export.js');?>" type="text/javascript"></script>
+<script type="text/javascript" src="<?=base_url('public/js/tableExport.js');?>"></script>
+<script type="text/javascript" src="<?=base_url('public/plugin/tableExport.jquery.plugin/jspdf/libs/sprintf.js');?>"></script>
+<script type="text/javascript" src="<?=base_url('public/plugin/tableExport.jquery.plugin/jspdf/jspdf.js');?>"></script>
+<script type="text/javascript" src="<?=base_url('public/plugin/tableExport.jquery.plugin/jspdf/libs/base64.js');?>"></script>
 
 <ul  class="list-inline" id="Individual_work_plan_title">
     <li class="pl_t" >
@@ -62,9 +69,12 @@
         </li>
         <li class="col-md-2"><a  class="btn btn-mystyle " id="data_stn" >確認送出</a></li>
     </ul>
+    <br><br><br>
+    
+    
   <ul id="today_logbook" style="width:1040px">
     <div>
-        <table class="table table-bordered" style="width:1040px">
+        <table id="today_logbook_table"  class="table table-bordered" style="width:1040px">
             <thead>
                 <tr>
                     <td style="width:80px">工作時數</td>
@@ -77,7 +87,7 @@
             </thead>
             <tbody>
                 <tr data-list-id="0">
-                    <td><input type="text" name="today_leng[]" class="today_leng" size="1"  ></td>
+                    <td><input type="text" name="today_leng[]" class="today_leng"  ></td>
                     <td><select class="form-control today_state"  name="today_state[]"  >
                             <option value="W">案件</option>
                             <option value="D">指派</option>
@@ -85,28 +95,16 @@
                         </select></td>
                     <td><input type="text" name="today_caseno[]" class="today_caseno" maxlength="5"   ></td>
                     <td><input type="text" name="today_name[]" class="today_casename" ></td>
-                    <td><input type="text" name="today_content[]" class="today_content" ></td>
-                    <td><input type="text" name="today_remark[]" class="today_remark" ></td>
-                </tr>
-                <tr data-list-id="1">
-                    <td><input type="text" name="today_leng[]" class="today_leng" size="1"   ></td>
-                    <td><select class="form-control today_state"  name="today_state[]"  >
-                            <option value="W">案件</option>
-                            <option value="D">指派</option>
-                            <option value="L">學習</option>
-                        </select></td>
-                    <td><input type="text" name="today_caseno[]" class="today_caseno" maxlength="5"   ></td>
-                    <td><input type="text" name="today_name[]" class="today_casename" ></td>
-                    <td><input type="text" name="today_content[]" class="today_content" ></td>
+                    <td class="today_content_td"><input type="text" name="today_content[]" class="today_content" ></td>
                     <td><input type="text" name="today_remark[]" class="today_remark" ></td>
                 </tr>
             </tbody>
         </table>
     </div>
-    
     <div style="width:auto;text-align:right;">
         <a  id="today_new_row" class="btn btn-mystyle" >新增</a>
     </div> 
+    
     
   </ul>
   </form>
@@ -164,10 +162,11 @@
                 data-url="<?=base_url("logbook/search_caseno".$tab_search_str)?>"
                 data-page-list="[10, 20, 25 , 50, 100, ALL]"
                 data-show-footer="false"
+                data-row-style="rowStyle"
 			<?php if($this->session->userdata('case_number')["class"] != 3) {?>
-				style="width:1220px"
+				style="width:1240px"
 			<?php }else{ ?>
-				style="width:1160px"
+				style="width:1180px"
 			<?php } ?>
           >
             <thead>
@@ -176,9 +175,9 @@
                   <th data-field='NO' data-width='10'	data-visible="false" >id</th>
                   <th data-field='date' data-width='100'  data-sortable="true" data-filter-control="true" data-editable="true"  >日期</th>
 				<?php if($this->session->userdata('case_number')["class"] != 3) {?>
-					<th data-field='member' data-width='60' data-formatter="MemberFormatter"  data-sortable="true" data-filter-control="true" data-editable="true"  >成<br>員</th>
+					<th data-field='member' data-width='80' data-formatter="MemberFormatter"  data-sortable="true" data-filter-control="true" data-editable="true"  >成員</th>
 				<?php } ?>
-                  <th data-field='length' data-width='50'  data-formatter="LengthFormatter"   data-sortable="true" data-filter-control="true" data-editable="true"  >時<br>數</th>
+                  <th data-field='length' data-width='50'  data-formatter="LengthFormatter"   data-sortable="true" data-filter-control="true" data-editable="true"  >時數</th>
                   <th data-field='state' data-width='110' data-formatter="StateFormatter"  data-sortable="true" data-filter-control="true" data-editable="true"  >工作類型</th>
                   <th data-field='caseno' data-width='100' data-sortable="true" data-filter-control="true" >案件編號</th>
                   <th data-field='name' data-width='300'  data-sortable="true" data-filter-control="true" data-editable="true"  >案件名稱</th>
@@ -192,29 +191,44 @@
   </div>  
 </div>
 <script>
+var work_str_list = new Object();
+function set_content(type,elem)
+{
+    $(elem).html(work_str_list[type]);
+}
 $(".today_state").change(function(){
 	var tmp_val = $(this).val();
 	switch (tmp_val) {
         case "L":
-			$(this).parent().parent().children("td").eq(2).html("X");
-			$(this).parent().parent().children("td").eq(3).html("X");
-            tmp_html_str = "學習"
+			$(this).parent().parent().children("td").eq(2).html('X<input type="hidden" name="today_caseno[]" class="today_caseno" value="" >');
+			$(this).parent().parent().children("td").eq(3).html('X<input type="hidden" name="today_name[]" class="today_casename" value="" >');
+			$(this).parent().parent().children("td").eq(4).html('<input type="text" name="today_content[]" class="today_content" >');
+            break;
+        case "D":
+			$(this).parent().parent().children("td").eq(2).html('X<input type="hidden" name="today_caseno[]" class="today_caseno" value="" >');
+			$(this).parent().parent().children("td").eq(3).html('X<input type="hidden" name="today_name[]" class="today_casename" value="" >');
+			list_id = $(this).parent().parent().attr('data-list-id');
+			call_autocomplete(list_id);
+            var content_elem = $(this).parent().parent().children("td").eq(4);
+            set_content(tmp_val,content_elem);
             break;
 
-        default:
+        case "W":
             $(this).parent().parent().children("td").eq(2).html('<input type="text" name="today_caseno[]" class="today_caseno" maxlength="5" >');
 			$(this).parent().parent().children("td").eq(3).html('<input type="text" name="today_name[]" class="today_casename" >');
 			list_id = $(this).parent().parent().attr('data-list-id');
 			call_autocomplete(list_id);
+            var content_elem = $(this).parent().parent().children("td").eq(4);
+            set_content(tmp_val,content_elem);
             break;
     }
 })
 
 function LengthFormatter(value, row, index) {
     row.length = value.substr(0,5);
-	return row.length;
+	return value;
 }
-var today_case_cnt = 2;
+var today_case_cnt = 1;
 var old_work_to_today_cnt = 0;
 function OtherFormatter(value, row, index) {
 	return '<a class="glyphicon glyphicon-share musPick upToTodayWork"></a>';
@@ -227,10 +241,22 @@ window.OtherEvents = {
 		}
 		$(".today_leng").eq(old_work_to_today_cnt).val(row.length);
 		$(".today_state").eq(old_work_to_today_cnt).val(row.state);
-		$(".today_caseno").eq(old_work_to_today_cnt).val(row.caseno);
-		$(".today_casename").eq(old_work_to_today_cnt).val(row.name);
-		$(".today_content").eq(old_work_to_today_cnt).val(row.content);
+        if(row.state == "L")
+        {
+            $(".today_caseno").eq(old_work_to_today_cnt).parent().html('X<input type="hidden" name="today_caseno[]" value="" >');
+            $(".today_casename").eq(old_work_to_today_cnt).parent().html('X<input type="hidden" name="today_name[]" value="" >');
+            $(".today_content").eq(old_work_to_today_cnt).parent().html('<input type="text" name="today_content[]" class="today_content" >');
+            $(".today_content").eq(old_work_to_today_cnt).val(row.content);
+        }else{
+            $(".today_caseno").eq(old_work_to_today_cnt).parent().html('<input type="text" name="today_caseno[]" class="today_caseno" maxlength="5" >');
+            $(".today_caseno").eq(old_work_to_today_cnt).val(row.caseno);
+            $(".today_casename").eq(old_work_to_today_cnt).parent().html('<input type="text" name="today_name[]" class="today_casename" >');
+            $(".today_casename").eq(old_work_to_today_cnt).val(row.name);
+            $(".today_content").eq(old_work_to_today_cnt).parent().html(work_str_list[row.state]);
+            $(".today_content").eq(old_work_to_today_cnt).val(row.content);
+        }
 		$(".today_remark").eq(old_work_to_today_cnt).val(row.remark);
+        today_total_time();
 		old_work_to_today_cnt++;
     }
 };
@@ -255,7 +281,7 @@ function StateFormatter(value, row, index){
 }
 
 function MemberFormatter(value, row, index){
-    return row.member +"<br>"+row.member_name;
+    return row.member +" "+row.member_name;
 }
   function call_autocomplete(tr_list_id)
   {
@@ -322,7 +348,7 @@ function MemberFormatter(value, row, index){
 
   function call_new_today_work_row(){
 	$("#today_logbook table tbody").append('<tr data-list-id="' + today_case_cnt +'">'+
-			'<td><input type="text" name="today_leng[]" class="today_leng" size="1" style="width:40px"  min="0" max="20" ></td>'+
+			'<td><input type="text" name="today_leng[]" class="today_leng"></td>'+
 			'<td><select class="form-control today_state"  name="today_state[]"  >'+
 			'<option value="W">案件</option>'+
 			'<option value="D">指派</option>'+
@@ -330,12 +356,57 @@ function MemberFormatter(value, row, index){
 			'</select></td>'+
 			'<td><input type="text" name="today_caseno[]" class="today_caseno" maxlength="5"   ></td>'+
 			'<td><input type="text" name="today_name[]" class="today_casename" ></td>'+
-			'<td><input type="text" name="today_content[]" class="today_content" ></td>'+
+			'<td class="today_content_td"><input type="text" name="today_content[]" class="today_content" ></td>'+
 			'<td><input type="text" name="today_remark[]" class="today_remark" ></td>'+
 			'</tr>');
 
     call_autocomplete(today_case_cnt++);
   }
+
+function today_total_time()
+{
+
+
+
+        var today_leng_input_elm = $(".today_leng");
+        var set_hour = 0;
+        var set_min = 0;
+        for (i = 0 ; i< today_leng_input_elm.length ; i++) {
+            input_time_str =  $(today_leng_input_elm[i]).val();
+            if(!input_time_str)
+            {
+                continue;
+            }
+            if(input_time_str.indexOf(":") != -1)
+            {
+                set_hour += parseInt( input_time_str.substr(0,input_time_str.indexOf(":")));
+            }
+        	set_min += parseInt(input_time_str.substr(input_time_str.indexOf(":")+1,2));
+        }
+
+        
+        today_work_time.setHours( set_hour + today_work_time_old.getHours() , set_min + today_work_time_old.getMinutes());
+
+        var set_time_str = padLeft(today_work_time.getHours() + "",2) + ":" + padLeft(today_work_time.getMinutes() + "" , 2);
+        $("#today_leng_total").html(set_time_str);
+    
+}
+
+function rowStyle(row, index)
+{
+  if ((index+1) % 5 == 0 ) {
+      return {
+          classes: "line_5_style"
+      };
+  }
+  return {};
+}
+$(document).on("change",".today_leng",function(e){
+    var leng_str = $(this).val();
+    leng_str = leng_str.replace(".",":");
+    $(this).val(leng_str);
+    today_total_time();
+});
 var today_work_time = new Date(0);
 var today_work_time_old = new Date(0);
 $(document).ready(function(){
@@ -399,33 +470,7 @@ $(document).ready(function(){
 	});
 
 
-    $(".today_leng").on("change",function(e){
-        var leng_str = $(this).val();
-        leng_str = leng_str.replace(".",":");
-        $(this).val(leng_str);
 
-        var today_leng_input_elm = $(".today_leng");
-        var set_hour = 0;
-        var set_min = 0;
-        for (i = 0 ; i< today_leng_input_elm.length ; i++) {
-            input_time_str =  $(today_leng_input_elm[i]).val();
-            if(!input_time_str)
-            {
-                continue;
-            }
-            if(input_time_str.indexOf(":") != -1)
-            {
-                set_hour += parseInt( input_time_str.substr(0,input_time_str.indexOf(":")));
-            }
-        	set_min += parseInt(input_time_str.substr(input_time_str.indexOf(":")+1,2));
-        }
-
-        
-        today_work_time.setHours( set_hour + today_work_time_old.getHours() , set_min + today_work_time_old.getMinutes());
-
-        var set_time_str = padLeft(today_work_time.getHours() + "",2) + ":" + padLeft(today_work_time.getMinutes() + "" , 2);
-        $("#today_leng_total").html(set_time_str);
-    });
 
     $.ajax({
         url: base_url+"logbook/get_log_today_leng",
@@ -437,5 +482,43 @@ $(document).ready(function(){
             today_work_time_old.setHours(data.substr(0,2),data.substr(3,2));
         }
     });
+
+
+    $.ajax({
+        url:base_url+"logbook_head/get_head_list/W",
+        dataType: "json",
+        type: "get",
+        success: function (data) {
+            
+            var str = "";
+            str = '<select class="form-control today_content"  name="today_content[]"  >';
+            for(var key in data)
+            {
+                str += '<option value="'+data[key].work_content+'">'+data[key].work_content+'</option>'
+            }
+            str += '</select>';
+            work_str_list["W"] = str;
+            $(".today_content_td").html(work_str_list["W"]);
+        }
+    })
+    $.ajax({
+        url:base_url+"logbook_head/get_head_list/D",
+        dataType: "json",
+        type: "get",
+        success: function (data) {
+            var str = "";
+            str = '<select class="form-control today_content"  name="today_content[]"  >';
+            for(var key in data)
+            {
+                str += '<option value="'+data[key].work_content+'">'+data[key].work_content+'</option>'
+            }
+            str += '</select>';
+            work_str_list["D"] = str;
+        }
+    })
+
+
+    $("#title_edit_menu .work_logbook a").css("color","red");
+    
 });
 </script>
