@@ -24,6 +24,11 @@
 	background-color: blue;
 	color: white;
 }
+
+.dayClickEvent:hover{
+	background-color: #CCDDFF;
+	color: black;
+}
 .dayClickEvent{
 	font-size:10px;
 	PADDING-RIGHT: 4px;
@@ -42,7 +47,7 @@
 	top: 0px;
 	background-color: white;
 	position: absolute;
-	z-index:100;
+	z-index:1150;
 }
 .monselbg {
 	font-family:Arial;
@@ -70,4 +75,14 @@
 	HEIGHT: 10pt;
 	TEXT-ALIGN: center;
 	TEXT-DECORATION: none;
+}
+.cal-modal-backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1140;
+    background-color: #000;
+    opacity: .5;
 }

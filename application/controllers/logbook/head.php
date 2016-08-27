@@ -20,13 +20,13 @@ class head extends MY_Controller{
 
 	public function edit_head(){
 		$post_data = $this->input->post(null,true);
-		$post_data["t_update_date"] = date ("Y- m - d / H : i : s"); 
+		$post_data["t_update_date"] = date ("Y-m-d H:i:s"); 
 		$post_data["t_update_id"] = $this->session->userdata('case_number')["user_id"];
 		if($post_data["uid"] == 0)
 		{
 			unset($post_data["uid"]);
 			$post_data["t_create_id"] = $this->session->userdata('case_number')["user_id"];
-			$post_data["state"] = "A";
+			$post_data["type"] = "A";
 			$rtn = $this->logbook_head_model->creat_head($post_data);
 			redirect(base_url('logbook_head/index/'.$post_data["type"]));
 		}else{

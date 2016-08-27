@@ -22,7 +22,7 @@ class logbook_model extends CI_Model{
 		{
 			//echo json_encode($where_arr);
 
-			$this->db->select("logbook_log.caseno,caseindex_caseno.name,logbook_log.state")->from("logbook_log")
+			$this->db->select("logbook_log.caseno,caseindex_caseno.name,logbook_log.type")->from("logbook_log")
 				->join("caseindex_caseno","caseindex_caseno.caseno = logbook_log.caseno","left")
 				->order_by("logbook_log.date desc,NO desc");
 			if(isset($where_arr))

@@ -14,10 +14,11 @@
 	height: 100px;
 	}
 	.pl_t{
-	  border-bottom: 3px double black;
+	  border-bottom: 3px double blue;
 	  font-size:30px;
 	  font-family:DFKai-sb;
 	  font-weight: bolder;
+	  color:blue;
 	}
 	.date_set{
 	    width: 100px;
@@ -50,11 +51,56 @@
 <script type="text/javascript" src="<?=base_url('public/plugin/tableExport.jquery.plugin/jspdf/jspdf.js');?>"></script>
 <script type="text/javascript" src="<?=base_url('public/plugin/tableExport.jquery.plugin/jspdf/libs/base64.js');?>"></script>
 
-<ul  class="list-inline" id="Individual_work_plan_title">
+<!--<ul  class="list-inline" id="Individual_work_plan_title">
     <li class="pl_t" >
         工作記錄
     </li>
-</ul>
+</ul>-->
+
+    
+    <div id="history_logbook">
+    <ul class="list-inline" >
+    <li class=" col-md-2" >
+            <span class="pl_t">工作計畫</span>
+        </li>
+    </ul>
+      <div id="toolbar" class="list-inline">
+              
+      </div>
+      <table id="logbook_tab"
+                data-toggle="table"
+                data-toolbar="#toolbar"
+                data-search="true"
+                data-show-refresh="true"
+                data-show-columns="true"
+                data-show-export="true"
+                data-detail-formatter="detailFormatter"
+                data-minimum-count-columns="2"
+                data-show-pagination-switch="true"
+                data-pagination="false"
+                data-url="<?=base_url("logbook_plan/get_LogbookPage_plan__list")?>"
+                data-page-list="[10, 20, 25 , 50, 100, ALL]"
+                data-show-footer="false"
+                data-row-style="rowStyle"
+				style="width:1240px"
+          >
+            <thead>
+
+              <tr>
+                  <th data-field='NO' data-width='10'	data-visible="false" >id</th>
+                  <th data-field='date' data-width='100'  data-sortable="true" data-filter-control="true" data-editable="true"  >日期</th>
+                  <th data-field='type' data-width='110' data-formatter="StateFormatter"  data-sortable="true" data-filter-control="true" data-editable="true"  >工作類型</th>
+                  <th data-field='caseno' data-width='100' data-sortable="true" data-filter-control="true" >案件編號</th>
+                  <th data-field='name' data-width='300'  data-sortable="true" data-filter-control="true" data-editable="true"  >案件名稱</th>
+          
+                  <th data-field='content' data-width='250'  data-sortable="true" data-filter-control="true" data-editable="true"  >工作內容</th>
+                  <th data-field='remark' data-width='200'  data-sortable="true" data-filter-control="true" data-editable="true"  >備註說明</th>
+				  <th data-width='50' data-formatter="OtherFormatter" data-events="OtherEvents" >複製</th>
+                </tr>
+            </thead>
+          </table>
+  </div> 
+
 <div id="Individual_work_plan">
 
   <form action="<?=base_url('/logbook/create_log_today')?>"  method="POST" accept-charset="utf-8" id="today_logbook_frm" >
@@ -77,7 +123,7 @@
         <table id="today_logbook_table"  class="table table-bordered" style="width:1040px">
             <thead>
                 <tr>
-                    <td style="width:80px">工作時數</td>
+                    <td style="width:80px">工時</td>
                     <td style="width:110px">工作類型</td>
                     <td style="width:100px">案件編號</td>
                     <td style="width:300px">案件名稱</td>
@@ -93,8 +139,8 @@
                             <option value="D">指派</option>
                             <option value="L">學習</option>
                         </select></td>
-                    <td><input type="text" name="today_caseno[]" class="today_caseno" maxlength="5"   ></td>
-                    <td><input type="text" name="today_name[]" class="today_casename" ></td>
+                    <td><input type="text" name="today_caseno[]" class="today_caseno" maxlength="5"  required="required"   ></td>
+                    <td><input type="text" name="today_name[]" class="today_casename"  required="required" ></td>
                     <td class="today_content_td"><input type="text" name="today_content[]" class="today_content" ></td>
                     <td><input type="text" name="today_remark[]" class="today_remark" ></td>
                 </tr>
@@ -102,7 +148,7 @@
         </table>
     </div>
     <div style="width:auto;text-align:right;">
-        <a  id="today_new_row" class="btn btn-mystyle" >新增</a>
+       <a  id="today_new_row" class="glyphicon glyphicon-plus musPick" ></a>  <a  id="today_remove_row" class="glyphicon glyphicon-minus musPick" ></a> 
     </div> 
     
     
@@ -110,7 +156,7 @@
   </form>
   <div  id="history_logbook_title">
 	<ul class="list-inline" >
-		<li  class="col-md-3">
+		<li  class="col-md-2">
 			<span class="pl_t ">工作記錄</span>
 		</li >
 		<?php if($this->session->userdata('case_number')["class"] == 1) {?>
@@ -150,7 +196,7 @@
       </div>
       <table id="logbook_tab"
                 data-toggle="table"
-                data-toolbar="#history_logbook_title"
+                data-toolbar="#toolbar"
                 data-search="true"
                 data-show-refresh="true"
                 data-show-columns="true"
@@ -178,7 +224,7 @@
 					<th data-field='member' data-width='80' data-formatter="MemberFormatter"  data-sortable="true" data-filter-control="true" data-editable="true"  >成員</th>
 				<?php } ?>
                   <th data-field='length' data-width='50'  data-formatter="LengthFormatter"   data-sortable="true" data-filter-control="true" data-editable="true"  >時數</th>
-                  <th data-field='state' data-width='110' data-formatter="StateFormatter"  data-sortable="true" data-filter-control="true" data-editable="true"  >工作類型</th>
+                  <th data-field='type' data-width='110' data-formatter="StateFormatter"  data-sortable="true" data-filter-control="true" data-editable="true"  >工作類型</th>
                   <th data-field='caseno' data-width='100' data-sortable="true" data-filter-control="true" >案件編號</th>
                   <th data-field='name' data-width='300'  data-sortable="true" data-filter-control="true" data-editable="true"  >案件名稱</th>
           
@@ -196,7 +242,7 @@ function set_content(type,elem)
 {
     $(elem).html(work_str_list[type]);
 }
-$(".today_state").change(function(){
+$(document).on("change",".today_state",function(){
 	var tmp_val = $(this).val();
 	switch (tmp_val) {
         case "L":
@@ -214,8 +260,8 @@ $(".today_state").change(function(){
             break;
 
         case "W":
-            $(this).parent().parent().children("td").eq(2).html('<input type="text" name="today_caseno[]" class="today_caseno" maxlength="5" >');
-			$(this).parent().parent().children("td").eq(3).html('<input type="text" name="today_name[]" class="today_casename" >');
+            $(this).parent().parent().children("td").eq(2).html('<input type="text" name="today_caseno[]" class="today_caseno" maxlength="5"  required="required" >');
+			$(this).parent().parent().children("td").eq(3).html('<input type="text" name="today_name[]" class="today_casename"  required="required" >');
 			list_id = $(this).parent().parent().attr('data-list-id');
 			call_autocomplete(list_id);
             var content_elem = $(this).parent().parent().children("td").eq(4);
@@ -240,20 +286,30 @@ window.OtherEvents = {
 			call_new_today_work_row();
 		}
 		$(".today_leng").eq(old_work_to_today_cnt).val(row.length);
-		$(".today_state").eq(old_work_to_today_cnt).val(row.state);
-        if(row.state == "L")
+		$(".today_state").eq(old_work_to_today_cnt).val(row.type);
+        switch(row.type)
         {
-            $(".today_caseno").eq(old_work_to_today_cnt).parent().html('X<input type="hidden" name="today_caseno[]" value="" >');
-            $(".today_casename").eq(old_work_to_today_cnt).parent().html('X<input type="hidden" name="today_name[]" value="" >');
-            $(".today_content").eq(old_work_to_today_cnt).parent().html('<input type="text" name="today_content[]" class="today_content" >');
-            $(".today_content").eq(old_work_to_today_cnt).val(row.content);
-        }else{
-            $(".today_caseno").eq(old_work_to_today_cnt).parent().html('<input type="text" name="today_caseno[]" class="today_caseno" maxlength="5" >');
-            $(".today_caseno").eq(old_work_to_today_cnt).val(row.caseno);
-            $(".today_casename").eq(old_work_to_today_cnt).parent().html('<input type="text" name="today_name[]" class="today_casename" >');
-            $(".today_casename").eq(old_work_to_today_cnt).val(row.name);
-            $(".today_content").eq(old_work_to_today_cnt).parent().html(work_str_list[row.state]);
-            $(".today_content").eq(old_work_to_today_cnt).val(row.content);
+			case "L":
+				$(".today_caseno").eq(old_work_to_today_cnt).parent().html('X<input type="hidden" name="today_caseno[]" class="today_caseno" value="" >');
+				$(".today_casename").eq(old_work_to_today_cnt).parent().html('X<input type="hidden" name="today_name[]" class="today_casename" value="" >');
+				$(".today_content").eq(old_work_to_today_cnt).parent().html('<input type="text" name="today_content[]" class="today_content" >');
+				$(".today_content").eq(old_work_to_today_cnt).val(row.content);
+				break;
+			case "W":
+				$(".today_caseno").eq(old_work_to_today_cnt).parent().html('<input type="text" name="today_caseno[]" class="today_caseno" maxlength="5" >');
+				$(".today_caseno").eq(old_work_to_today_cnt).val(row.caseno);
+				$(".today_casename").eq(old_work_to_today_cnt).parent().html('<input type="text" name="today_name[]" class="today_casename" >');
+				$(".today_casename").eq(old_work_to_today_cnt).val(row.name);
+				$(".today_content").eq(old_work_to_today_cnt).parent().html(work_str_list[row.type]);
+				$(".today_content").eq(old_work_to_today_cnt).val(row.content);
+				call_autocomplete(old_work_to_today_cnt);
+				break;
+			case "D":
+				$(".today_caseno").eq(old_work_to_today_cnt).parent().html('X<input type="hidden" name="today_caseno[]" class="today_caseno" value="" >');
+				$(".today_casename").eq(old_work_to_today_cnt).parent().html('X<input type="hidden" name="today_name[]" class="today_casename" value="" >');
+				$(".today_content").eq(old_work_to_today_cnt).parent().html(work_str_list[row.type]);
+				$(".today_content").eq(old_work_to_today_cnt).val(row.content);
+				break;
         }
 		$(".today_remark").eq(old_work_to_today_cnt).val(row.remark);
         today_total_time();
@@ -354,9 +410,9 @@ function MemberFormatter(value, row, index){
 			'<option value="D">指派</option>'+
 			'<option value="L">學習</option>'+
 			'</select></td>'+
-			'<td><input type="text" name="today_caseno[]" class="today_caseno" maxlength="5"   ></td>'+
-			'<td><input type="text" name="today_name[]" class="today_casename" ></td>'+
-			'<td class="today_content_td"><input type="text" name="today_content[]" class="today_content" ></td>'+
+			'<td><input type="text" name="today_caseno[]" class="today_caseno" maxlength="5"   required="required"  ></td>'+
+			'<td><input type="text" name="today_name[]" class="today_casename"  required="required" ></td>'+
+			'<td class="today_content_td">'+work_str_list["W"]+'</td>'+
 			'<td><input type="text" name="today_remark[]" class="today_remark" ></td>'+
 			'</tr>');
 
@@ -448,11 +504,15 @@ $(document).ready(function(){
   }
 
   $("#today_new_row").click(call_new_today_work_row);
+  $("#today_remove_row").click(function(e){
+      $("#today_logbook_table tbody tr:last-child").remove();
+      today_case_cnt--;
+      old_work_to_today_cnt--;
+  });
 
 
 
-
-  dt = new Date();
+  /*dt = new Date();
   today_str = (dt.getFullYear()-1911) + "/" + padLeft((dt.getMonth()+1)+"",2) + "/" + padLeft(dt.getDate()+"",2);
   $("#date").val(today_str);
   $("#save").click(function (){
@@ -460,7 +520,7 @@ $(document).ready(function(){
       $("#log_frm").submit();
   });
   state_val = "<?=$prev_caseno_state?>";
-  $("#state").val(state_val);
+  $("#state").val(state_val);*/
   
 	$("#data_stn").click(function(e){
 		if(confirm("確認是否送出"))

@@ -10,6 +10,9 @@
         background-color: #5E825E;
         border-color: #4cae4c;
     }
+	.line_5_style{
+        background-color:#CEFFCE;
+    }
 </style>
 
 <div>
@@ -40,7 +43,7 @@
     <br>
     <br>
     <div id="toolbar" class="list-inline">
-        <a href="#addModal" data-toggle="modal"><button id="new" type="button" class="btn btn-mystyle">新增</button></a>
+        <a href="#addModal" data-toggle="modal" class="btn btn-mystyle">新增</a>
     </div>
     <div style="width:500px">
     <table id="head_edit"
@@ -54,6 +57,7 @@
             data-minimum-count-columns="2"
             data-show-pagination-switch="true"
             data-pagination="false"
+			data-row-style="rowStyle"
             data-url="<?=base_url("logbook_head/get_head_list/".$set_type)?>"
             data-page-list="[10, 20, 25 , 50, 100, ALL]"
             data-show-footer="false"
@@ -114,6 +118,17 @@
     	</div>
 
 <script>
+
+
+function rowStyle(row, index)
+{
+  if ((index+1) % 5 == 0 ) {
+      return {
+          classes: "line_5_style"
+      };
+  }
+  return {};
+}
 
 var replaceWith = $('<input id="temp_name_input" name="temp" style="width:80%" />');
 var save_ok_With = $('<a class="glyphicon glyphicon-ok musPick name_save_ok"  aria-hidden="true"> </a>');

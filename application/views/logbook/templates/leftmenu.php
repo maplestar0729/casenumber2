@@ -31,12 +31,15 @@
             </ul>
 			<?php if($this->session->userdata('case_number')["class"] == 1){ ?>
 			<ul class="menu">
-				<li class="work_head"><a >工作內容編輯</a></li>
+				<li class="work_head"><a href="<?=base_url('/logbook_head/index/W')?>">工作內容編輯</a></li>
 				<li class="small-menu work_head_W"><span><a href="<?=base_url('/logbook_head/index/W')?>">案件</a></span></li>
 				<li class="small-menu work_head_D"><span><a href="<?=base_url('/logbook_head/index/D')?>">指派</a></span></li>
             </ul>
 			<?php }?>
-			
+			<ul class="menu">
+            	<li class="work_plan"><a href="<?=base_url('logbook_plan/index');?>" >工作計畫</a></li>
+
+            </ul>
         </div>
         <div >
 

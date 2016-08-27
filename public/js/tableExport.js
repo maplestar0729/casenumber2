@@ -11,16 +11,26 @@
   $.fn.extend({
     tableExport: function (options) {
       d = new Date();
-      if($(this).attr("id") == "year_data_tab" )
-      {
-        file_name = $year + "年案件編號表" + $year + padLeft(d.getMonth(),2) + padLeft(d.getDate(),2);
-      }else if($(this).attr("id") == "year_undecided" )
-      {
-        file_name = $year + "年尚未編號案件表" + $year + padLeft(d.getMonth(),2) + padLeft(d.getDate(),2);
-      }else if($(this).attr("id") == "year_all_data" )
-      {
-        file_name = $year + "年全部案件編號表" + $year + padLeft(d.getMonth(),2) + padLeft(d.getDate(),2);
-      }
+		switch($(this).attr("id"))
+		{
+			case "year_data_tab":
+				file_name = $year + "年案件編號表" + $year + padLeft(d.getMonth()+1,2) + padLeft(d.getDate(),2);
+				break;
+			case "year_undecided":
+				file_name = $year + "年尚未編號案件表" + $year + padLeft(d.getMonth()+1,2) + padLeft(d.getDate(),2);
+				break;
+			case "year_all_data":
+				file_name = $year + "年全部案件編號表" + $year + padLeft(d.getMonth()+1,2) + padLeft(d.getDate(),2);
+				break;
+			case "year_all_data":
+				file_name = $year + "年全部案件編號表" + $year + padLeft(d.getMonth()+1,2) + padLeft(d.getDate(),2);
+				break;
+			case "logbook_tab":
+				file_name = $("#search_frm #en ").val() + $("#search_frm #en :selected").text() +"_"+$("#search_frm #start_date").val() +"-"+$("#search_frm #end_date").val() +"工作日誌";
+				file_name = file_name.replace(/\//g,"");
+				break;
+
+		}
       var defaults = {
         consoleLog: false,
         csvEnclosure: '"',

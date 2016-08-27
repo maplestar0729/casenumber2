@@ -2,7 +2,10 @@
 {
 	cursor:pointer;
 }
-input[type="text"] { padding: 0.4em; font-family: Arial; }
+#sortable li input[type="text"] { 
+	padding: 0.4em; 
+	font-family: Arial; 
+}
 
 /* Inline Edit */
 .hover { background: #fffbe1; }

@@ -41,7 +41,9 @@
 $route['default_controller'] = "home";
 $route['logbook_head/(:any)'] = 'logbook/head/$1';
 $route['logbook/(:any)'] = 'logbook/work/$1';
+$route['logbook_plan/(:any)'] = 'logbook/plan/$1';
 $route['logbook'] = 'logbook/work';
+$route['logbook_plan'] = 'logbook/plan';
 $route['404_override'] = '';
 
 

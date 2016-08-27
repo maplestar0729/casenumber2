@@ -4,6 +4,12 @@ class work extends MY_Controller{
 
     public function __construct(){
         parent::__construct();
+		if($this->session->userdata('case_number')["logged_in"])
+		{
+		}		else
+		{
+			redirect(base_url('login'));
+		}
     		$this->load->model('logbook/logbook_model');
     		$this->load->model('login_model');
         $this->load->model('case_table_model');
@@ -42,7 +48,7 @@ class work extends MY_Controller{
       {
           $data["prev_caseno"] = $log_data[0]["caseno"];
           $data["prev_caseno_name"] = $log_data[0]["name"];
-          $data["prev_caseno_state"] = $log_data[0]["state"];
+          $data["prev_caseno_state"] = $log_data[0]["type"];
       }else
       {
           $data["prev_caseno"] = "";
@@ -116,7 +122,7 @@ class work extends MY_Controller{
                 $post_data["today_leng"][$key] = $post_data["today_leng"][$key].":00";
             }
 			      $create_log_data[$key]["length"]  =  $post_data["today_leng"][$key];
-            $create_log_data[$key]["state"]   =  $post_data["today_state"][$key];
+            $create_log_data[$key]["type"]   =  $post_data["today_state"][$key];
             $create_log_data[$key]["caseno"]  =  $post_data["today_caseno"][$key];
             //$create_log_data[$key]["name"]    =  $post_data["today_name"][$key];
             $create_log_data[$key]["content"] =  $post_data["today_content"][$key];
