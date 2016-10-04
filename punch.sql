@@ -12,3 +12,18 @@ CREATE TABLE `www_casenumber`.`logbook_log` ( `NO` BIGINT(30) NOT NULL AUTO_INCR
 /*--------------------------------------------*/
 
 ALTER TABLE `logbook_log` ADD `remark2` TEXT NOT NULL ;
+
+
+
+/*----------------------2016/08/28------------------------*/
+ALTER TABLE `logbook_plan` ADD `create_member` VARCHAR(2) NOT NULL AFTER `member`;
+
+
+/*******************2016/09/17**************************/
+ALTER TABLE `caseindex_caseno` ADD `Note` TEXT NOT NULL ;
+ALTER TABLE `logbook_plan` ADD `t_ModifyDate` DATETIME NOT NULL ;
+
+
+
+
+ALTER TABLE `logbook_plan` ADD `state2` VARCHAR(2) NOT NULL DEFAULT 'D' AFTER `remark`;

@@ -12,8 +12,8 @@ class plan extends MY_Controller{
         $this->load->model('error_model');
     }
 
-    public function index(){
-		
+    public function index($set_type = ""){
+	  
       $uid = $this->session->userdata('case_number')["user_id"];
       $userdata = $this->login_model->get_user_uid($uid);
       $search_data["en"] = $userdata[0]["member"];
@@ -50,9 +50,22 @@ class plan extends MY_Controller{
           $data["prev_caseno_name"] = "";
           $data["prev_caseno_state"] = "";
       }
-  		$this->logbook_template("logbook/plan/index",$data);
-    }
+		 $this->logbook_template("logbook/plan/index",$data);
 
+    }
+  public function planend(){
+    
+      $get_data = $this->input->get(null,true);
+      $data["tab_search_str"] = "?start_date=".$get_data["start_date"]."&end_date=".$get_data["end_date"];
+      
+
+
+      if($this->session->userdata('case_number')["class"] != 3 )
+      {
+        $data["tab_search_str"] = $data["tab_search_str"]."?en=".$get_data["en"];
+      }
+    $this->logbook_template("logbook/plan/planend",$data);
+  }
 	public function get_plan_list(){
 		$get_data = $this->input->get(null,true);
 
@@ -88,7 +101,16 @@ class plan extends MY_Controller{
           $search_data["end_date"] = $get_data["end_date"];
       }
 	  	// echo json_encode($search_data);
-		$rtn = $this->logbook_plan_model->get_plan_list($search_data);
+		$rtn = $this->logbook_plan_model->get_plan_list($search_data,'1');
+		echo json_encode($rtn);
+	}
+	public function get_plan_END_list(){
+		$rtn = $this->logbook_plan_model->get_plan_list('','2');
+		echo json_encode($rtn);
+	}
+
+  public function get_plan_del_list(){
+		$rtn = $this->logbook_plan_model->get_plan_list('','3');
 		echo json_encode($rtn);
 	}
   public function get_LogbookPage_plan__list()
@@ -108,27 +130,30 @@ class plan extends MY_Controller{
         $userdata = $this->login_model->get_user_uid($uid);
 		if(isset($post_data["member"]))
 		{
-        	$create_log_data["member"] = $post_data["member"];
+        $create_log_data["member"] = $post_data["member"];
 		}else
 		{
 			$create_log_data["member"] = $userdata[0]["member"];
+        // echo json_encode($create_log_data);
 		} 
+    $create_log_data["state"] = "A";
 		$create_log_data["date"]  =  $post_data["date"];
 		$create_log_data["type"]   =  $post_data["today_state"];
 		$create_log_data["caseno"]  =  $post_data["today_caseno"];
 		$create_log_data["content"] =  $post_data["today_content"];
 		$create_log_data["remark"]  =  $post_data["today_remark"];
-		$create_log_data["state"] = "A";
+    $create_log_data["CreateID"] = $userdata[0]["member"];
 			//$create_log_data[$key]["name"]    =  $post_data["today_name"][$key];
 		//echo "{";
 		$error_data["error_string"] =  $uid.",";
 		echo json_encode($this->session->userdata('case_number')).",";
-		echo json_encode($userdata).",";
-		echo json_encode($post_data).",";
+		echo json_encode($userdata).",<br>";
+		echo "post_data:".json_encode($post_data).",";
         echo json_encode($create_log_data);
 		//$post_data["member"] = "";
 		$error_data["error_string"] = json_encode($this->session->userdata('case_number')).",".json_encode($userdata).",".json_encode($post_data).",".json_encode($create_log_data);
-		if($post_data["member"] == "")
+    // return;
+		if($userdata[0]["member"] == "")
 		{
 			echo "<script>";
             echo "alert(\"資料錯誤，請重新輸入\\nData Error\");";

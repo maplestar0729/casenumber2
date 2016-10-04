@@ -3,12 +3,12 @@
 				<ul class="menu" style="color:white;">
 					<li>
 					<?php
-	            echo (date("Y") - 1911).date("/m/d");
+	     //       echo (date("Y") - 1911).date("/m/d");
 	         ?>
 				 </li>
 			 </ul>
         	<ul class="menu">
-            	<li><a href="<?=base_url('title_edit');?>">編輯-進度點</a></li>
+            	<li><a href="<?=base_url('title_edit');?>">工作進度點編輯</a></li>
 
             </ul>
         		<ul id="year_menu"  class="menu">
@@ -33,7 +33,7 @@
 		var start_year = 89;
 		var d = new Date();
 		$(document).ready(function(e) {
-			for(i = d.getFullYear()-1911,j = 0 ;j<5 ; i-- , j++)
+      for(i = d.getFullYear()-1911,j = 0 ;j<5 ; i-- , j++)
 			{
 				if($year == i )
 					$( "#year_menu" ).append('<li><a href="'+base_url+'home/index/'+i+'" style="color:red;">'+i+'</a></li>' );
@@ -53,14 +53,8 @@
 			{
 				$(".menu_children").show();
 			}
-		
-			$("#header .casenumber").addClass(function(e){
-				return "select_elem";
-			});
-					
-				
 
-		});
+    });
 		$(".menu .menu_parent").on("click",function(e){
 			//debugger;
 			$(this).parent().parent(".menu").children(".menu_children").toggle();

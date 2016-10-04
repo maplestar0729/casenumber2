@@ -4,6 +4,7 @@
 	  font-size:30px;
 	  font-family:DFKai-sb;
 	  font-weight: bolder;
+      color:	#930000;
 	}
     .btn-mystyle{
         color: #fff;
@@ -19,16 +20,35 @@
 	#today_logbook_frm #today_logbook{
 		padding-left:180px
 	}
+    .casenoEdit{
+    width: 99%;
+    min-height:25px ;
+    height:auto;
+    }
+    .casenoEdit:hover{
+        background-color: #0066FF;
+        color: white;
+    }
+    .deadline-font{
+        color:red;
+    }
 </style>
 
 <div>
+<?php
+// echo date("Y-m-d H:m:s");
+?>
   <form action="<?=base_url('/logbook_plan/create_log_plan')?>"  method="POST" accept-charset="utf-8" id="today_logbook_frm" >
   <div id="work_plan">
   </div>
+  
+  
     <ul class="list-inline"  id="today_logbook_title">
-        <li class=" col-md-2" >
-            <span class="pl_t">工作計畫新增</span>
-        </li>
+		
+			<li class=" col-md-2" >
+				<span class="pl_t musPick" >工作計畫新增</span>
+			</li>
+		
         <li class="col-md-2"><a  class="btn btn-mystyle " id="data_stn" >確認送出</a></li>
     </ul>
     <br><br><br>
@@ -50,10 +70,11 @@
             </thead>
             <tbody>
                 <tr data-list-id="0">
-                    <td><input type="text" name="date" class="today_leng"  ></td>
+                    <td><input type="text" name="date" class="today_leng musPick"  id="today_leng"  ></td>
 			  <?php if($this->session->userdata('case_number')["class"] != 3) {?>
                     <td style="width:100px">
-                <select class="form-control"  name="member" id="member"  style="width:110px"/>
+                <select class="form-control"  name="member" id="member"  style="width:110px">
+                  <option value="">未選擇</option>
 				  <?php
 					  if(isset($member))
 					  {
@@ -86,7 +107,7 @@
   </ul>
     <ul class="list-inline">
         <li class=" col-md-2" >
-            <span class="pl_t">工作計畫</span>
+            <span class="pl_t musPick">工作計畫</span>
         </li>
     </ul>
     <br>
@@ -111,6 +132,61 @@
                 data-show-footer="false"
                 data-row-style="rowStyle"
 			<?php if($this->session->userdata('case_number')["class"] != 3) {?>
+				style="width:1260px"
+			<?php }else{ ?>
+				style="width:1200px"
+			<?php } ?>
+          >
+            <thead>
+
+              <tr>
+                  <th data-field='NO'     data-width='10'  data-visible="false" >id</th>
+                  <th data-field='date'   data-width='350' data-formatter="DateFormatter"   data-events="DateEvents" data-sortable="true" data-filter-control="true" data-editable="true"  >日期</th>
+			      <th data-field='member' data-width='80'  data-formatter="MemberFormatter" data-events="MemberEvents"  data-sortable="true" data-filter-control="true" data-editable="true"  >成員</th>
+                  <th data-field='type'   data-width='110' data-formatter="TypeFormatter"  data-sortable="true" data-filter-control="true" data-editable="true"  >工作類型</th>
+                  <th data-field='caseno' data-width='100' data-sortable="true" data-filter-control="true" >案件編號</th>
+                  <th data-field='name'   data-width='300' data-sortable="true" data-filter-control="true" data-editable="true"  >案件名稱</th>
+          
+                  <th data-field='content' data-width='250'  data-sortable="true" data-filter-control="true" data-editable="true"  >工作內容</th>
+                  <th data-field='remark'  data-width='200'  data-formatter="work_contentFormatter" data-events="work_contentEvents" data-sortable="true" data-filter-control="true" data-editable="true"  >備註說明</th>
+				  <th data-field='state2' data-formatter="schFormatter" data-width='300'  data-sortable="true" data-filter-control="true" data-editable="true"  >進度</th>
+                  <th data-field='state'  data-width='110' data-formatter="StateFormatter" data-events="OtherEvents"  data-sortable="true" data-filter-control="true" data-editable="true"  >草稿或公開</th>
+                  <th data-field='Other'   data-formatter="OtherFormatter" data-events="OtherEvents" data-width='50'  data-sortable="true" data-filter-control="true" data-editable="true"  >刪除否</th>
+
+				  </tr>
+            </thead>
+          </table>
+  </div>  
+</div>
+<div>
+
+    <ul class="list-inline">
+        <li class=" col-md-2" >
+            <span class="pl_t musPick">工作計畫紀錄</span>
+        </li>
+    </ul>
+    <br>
+    <br>
+    <br>
+    <div id="historylog_logbook">
+      <div id="toolbar" class="list-inline">
+      </div>
+      <table id="logbook_tab"
+                data-toggle="table"
+                data-toolbar="#toolbar"
+                data-search="true"
+                data-show-refresh="true"
+                data-show-columns="true"
+                data-show-export="true"
+                data-detail-formatter="detailFormatter"
+                data-minimum-count-columns="2"
+                data-show-pagination-switch="true"
+                data-pagination="false"
+                data-url="<?=base_url("logbook_plan/get_plan_del_list".$tab_search_str)?>"
+                data-page-list="[10, 20, 25 , 50, 100, ALL]"
+                data-show-footer="false"
+                data-row-style="rowStyle"
+			<?php if($this->session->userdata('case_number')["class"] != 3) {?>
 				style="width:1240px"
 			<?php }else{ ?>
 				style="width:1180px"
@@ -121,23 +197,35 @@
               <tr>
                   <th data-field='NO' data-width='10'	data-visible="false" >id</th>
                   <th data-field='date' data-width='100'  data-sortable="true" data-filter-control="true" data-editable="true"  >日期</th>
-					<th data-field='member' data-width='80' data-formatter="MemberFormatter"  data-sortable="true" data-filter-control="true" data-editable="true"  >成員</th>
+				  <th data-field='member' data-width='80' data-formatter="MemberFormatter"  data-sortable="true" data-filter-control="true" data-editable="true"  >成員</th>
                   <th data-field='type' data-width='110' data-formatter="TypeFormatter"  data-sortable="true" data-filter-control="true" data-editable="true"  >工作類型</th>
-                  <th data-field='state' data-width='110' data-formatter="StateFormatter"  data-sortable="true" data-filter-control="true" data-editable="true"  >工作類型</th>
+                  <!--<th data-field='state' data-width='110' data-formatter="StateFormatter"  data-sortable="true" data-filter-control="true" data-editable="true"  >工作類型</th>-->
                   <th data-field='caseno' data-width='100' data-sortable="true" data-filter-control="true" >案件編號</th>
                   <th data-field='name' data-width='300'  data-sortable="true" data-filter-control="true" data-editable="true"  >案件名稱</th>
-          
-                  <th data-field='content' data-width='250'  data-sortable="true" data-filter-control="true" data-editable="true"  >工作內容</th>
-                  <th data-field='remark' data-width='200'  data-sortable="true" data-filter-control="true" data-editable="true"  >備註說明</th>
-                  <th data-field='Other' data-formatter="OtherFormatter" data-events="OtherEvents" data-width='50'  data-sortable="true" data-filter-control="true" data-editable="true"  >備註說明</th>
-                </tr>
+
+				  <th data-field='state2' data-formatter="schFormatter" data-width='300'  data-sortable="true" data-filter-control="true" data-editable="true"  >進度</th>
+                  <!--<th data-field='Other' data-formatter="OtherFormatter_END" data-events="OtherEvents" data-width='50'  data-sortable="true" data-filter-control="true" data-editable="true"  >重新啟動</th>-->
+
+				</tr>
             </thead>
           </table>
   </div>  
 </div>
 
-
 <script>
+
+var member_list = new Object();
+<?php
+    if(isset($member))
+    {
+    foreach ($member as $key => $value) {
+        //echo json_encode($value);
+        echo 'member_list["'.$value["EN"].'"] = "'.$value["name"].'";  ';
+    }
+
+    }
+?>
+
 var work_str_list = new Object();
 function set_content(type,elem)
 {
@@ -147,32 +235,51 @@ $(document).on("change",".today_state",function(){
 	var tmp_val = $(this).val();
 	switch (tmp_val) {
         case "L":
-			$(this).parent().parent().children("td").eq(3).html('X<input type="hidden" name="today_caseno" class="today_caseno" value="" >');
-			$(this).parent().parent().children("td").eq(4).html('X<input type="hidden" name="today_name" class="today_casename" value="" >');
-			$(this).parent().parent().children("td").eq(5).html('<input type="text" name="today_content" class="today_content" >');
+			$(this).parent().parent().children().children(".today_caseno").parent().html('X<input type="hidden" name="today_caseno" class="today_caseno" value="" >');
+			$(this).parent().parent().children().children(".today_casename").parent().html('X<input type="hidden" name="today_name" class="today_casename" value="" >');
+			$(this).parent().parent().children().children(".today_content").parent().html('<input type="text" name="today_content" class="today_content" >');
             break;
         case "D":
-			$(this).parent().parent().children("td").eq(3).html('X<input type="hidden" name="today_caseno" class="today_caseno" value="" >');
-			$(this).parent().parent().children("td").eq(4).html('X<input type="hidden" name="today_name" class="today_casename" value="" >');
+			$(this).parent().parent().children().children(".today_caseno").parent().html('X<input type="hidden" name="today_caseno" class="today_caseno" value="" >');
+			$(this).parent().parent().children().children(".today_casename").parent().html('X<input type="hidden" name="today_name" class="today_casename" value="" >');
 			list_id = $(this).parent().parent().attr('data-list-id');
 			call_autocomplete(0);
-            var content_elem = $(this).parent().parent().children("td").eq(5);
+			var content_elem = $(this).parent().parent().children().children(".today_content").parent();
             set_content(tmp_val,content_elem);
             break;
 
         case "W":
-            $(this).parent().parent().children("td").eq(3).html('<input type="text" name="today_caseno" class="today_caseno" maxlength="5"  required="required" >');
-			$(this).parent().parent().children("td").eq(4).html('<input type="text" name="today_name" class="today_casename"  required="required" >');
+			$(this).parent().parent().children().children(".today_caseno").parent().html('<input type="text" name="today_caseno" class="today_caseno" maxlength="5"  required="required" >');
+			$(this).parent().parent().children().children(".today_casename").parent().html('<input type="text" name="today_name" class="today_casename"  required="required" >');
 			list_id = $(this).parent().parent().attr('data-list-id');
 			call_autocomplete(0);
-            var content_elem = $(this).parent().parent().children("td").eq(5);
+			var content_elem = $(this).parent().parent().children().children(".today_content").parent();
             set_content(tmp_val,content_elem);
             break;
     }
 })
 
+$(document).on('click','.pl_t',function(){
+	
+	if($(this).html()=="工作計畫新增")
+	{
+		$("#today_logbook").toggle();
+
+	}
+	else if ($(this).html()=="工作計畫")
+	{
+		$("#history_logbook").toggle();
+
+	}
+	else
+	{
+		$("#historylog_logbook").toggle();
+
+	}
+	
+});
 window.OtherEvents= {
-    'click .plan_open' :function (e, value, row, index){
+    'change .statech' :function (e, value, row, index){
         if(!confirm("確認是否公開"))
 		{
 			return;
@@ -181,7 +288,10 @@ window.OtherEvents= {
             "state":"B",
             "NO":row.NO
         }
-        update_plan(stn_data);
+        update_plan(stn_data,function(){
+            alert("OK");
+            location.reload();
+        });
     },'click .plan_del' :function (e, value, row, index){
         if(!confirm("確認是否刪除"))
 		{
@@ -191,18 +301,22 @@ window.OtherEvents= {
             "state":"D",
             "NO":row.NO
         }
-        update_plan(stn_data);
+        update_plan(stn_data,function(){
+            alert("OK");
+            location.reload();
+        });
     }
 }
-function update_plan(stn_data){
+function update_plan(stn_data,SuccessCallBack){
     $.ajax({
         url:base_url+"logbook_plan/update_plan",
         type:"POST",
         dataType:"JSON",
         data:stn_data,
         success:function(){
-            alert("OK");
-            location.reload();
+                    
+                    if(SuccessCallBack != undefined)
+                        SuccessCallBack();
         },
         error:function(){
             alert("error");
@@ -210,17 +324,159 @@ function update_plan(stn_data){
 
     })
 }
+
+function DateFormatter(value,row,index){
+
+	var tmp_str = "";
+    <?php if($this->session->userdata('case_number')["class"] == 1 || $this->session->userdata('case_number')["class"] == 2) {?>
+    
+        tmp_str = '<div class="row">';
+        tmp_str += '<div class="row_date musPick col-md-3" style="width:50%" data-NO="'+row.NO+'">'+row.date+'</div>';
+        tmp_str += '<div class="col-md-4" data-NO="'+row.NO+'" style="padding-left:5px;"><a class="del musPick" aria-hidden="true">重改</a></div>';
+        tmp_str += '</div>';
+        
+    <?php }else { ?>
+    if(row.state == "A")
+    {
+        tmp_str = '<div class="row">';
+        tmp_str += '<div class="row_date musPick col-md-3" style="width:50%" data-NO="'+row.NO+'">'+row.date+'</div>';
+        tmp_str += '<div class="col-md-4" data-NO="'+row.NO+'" style="padding-left:5px;"><a class="del musPick" aria-hidden="true">重改</a></div>';
+        tmp_str += '</div>';
+        
+    }else{
+        tmp_str = row.date;
+    }
+    <?php } ?>
+    
+    return tmp_str;
+}
+window.DateEvents = {
+    'click .del' :function (e, value, row, index){
+        data = { 'NO' : row.NO,
+                   'date' : ""
+            }
+        tmp_ele = $(this);
+        function CallBack()
+        {
+            tmp_ele.parent().parent().children(".musPick").html("");
+        }
+        
+        update_plan(data,CallBack);
+    }
+}
+var tmp_old_date_str;
+var calset={
+        "dow":['日','一','二','三','四','五','六'],
+        "tbBgColor":"91FEFF",
+        "months":["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],
+        "element_type":"html",
+        "click_over": function(){
+            tmp_NO = this.formname.attr("data-NO");
+            d_str = this.formname.html();
+            
+			if(DateDiff(d_str,dt) > 0){
+				alert('請輸入今天以後的日期');
+                this.formname.html(tmp_old_date_str);
+			}else
+            {
+                data = { 'NO' : tmp_NO,
+                    'date' : d_str
+                }
+                //debugger;
+                update_plan(data);
+            }
+            // update_status(data,this.formname.parent().parent());
+
+        }
+    };
+
+moncalendar1 = 0;
+$(document).on("click",".row_date", function(e){
+    e.stopPropagation();
+    if(moncalendar1==0)
+	{
+			moncalendar1 = new makecaldef("moncalendar1dw");
+	}
+    tmp_old_date_str = $(this).html();
+    moncalendar1.picksel($(this),calset);
+});
 function OtherFormatter(value, row, index){
     var rtn_str = "";
-    if(row.member == '<?php echo($log_member)?>')
+    if(row.state == "A" )
     {
-        rtn_str = '<a class="glyphicon glyphicon-share musPick plan_open"  aria-hidden="true"> </a><a class="glyphicon glyphicon-remove musPick plan_del" ></a>';
+    //    rtn_str += '<a class="glyphicon glyphicon-share musPick plan_open"  aria-hidden="true"> </a>';
+       rtn_str += '<a class="musPick plan_del"  aria-hidden="true">刪除 </a>';
     }
+    <?php if($this->session->userdata('case_number')["class"] == 1) {?>
+       if(row.state == "B" )
+       {
+            rtn_str += '<a class=" musPick plan_del"  aria-hidden="true">刪除 </a>';
+       }
+    <?php }else { ?>
+    // 預計刪除
+    // if(row.state == "B" )
+    // {
+    //     rtn_str += '<a class="glyphicon glyphicon-remove musPick plan__del"  aria-hidden="true"> </a>';
+    // }
+    <?php } ?>
+    return rtn_str;
+}
+function OtherFormatter_END(value, row, index){
+    var rtn_str = "";
+
+        rtn_str += '<a class="glyphicon glyphicon-share musPick plan_open"  aria-hidden="true"> </a>';
     return rtn_str;
 }
 
 function MemberFormatter(value, row, index){
-    return row.member +" "+row.member_name;
+    <?php if($this->session->userdata('case_number')["class"] == 1) {?>
+        var sel_str = "";
+        sel_str += '<select class="form-control MemberEdit"  style="width:110px">'
+        if(row.member == ""){
+            sel_str += '<option value="" selected>未選擇</option>';
+        }else{
+            sel_str += '<option value="">未選擇</option>';
+        }
+
+        for(var key in member_list){
+            if(key == row.member){
+                sel_str += '<option value="'+key+'" selected>'+key+' '+member_list[key]+'</option>';
+            }else {
+                sel_str += '<option value="'+key+'">'+key+' '+member_list[key]+'</option>';
+            }
+        }
+        // sel_str += '<?php
+		// 			  if(isset($member))
+		// 			  {
+		// 				foreach ($member as $key => $value) {
+		// 				  //echo json_encode($value);
+		// 				  echo '<option value="'.$value["EN"].'">'.$value["EN"].' '.$value["name"].'</option>';
+		// 				}
+
+		// 			  }
+		// 		  ?>';
+        sel_str += '</select>';
+        $(sel_str).val(row.member);
+        return sel_str;
+    <?php }else { ?>
+        return row.member +" "+row.member_name;
+    <?php } ?>
+    
+}
+window.MemberEvents = {
+     'change .MemberEdit' :function (e, value, row, index){
+         var tmp_val = $(this).val();
+         $data = {
+             "NO" : row.NO,
+             "member" : tmp_val
+         }
+         function CallBack()
+         {
+             alert("OK");
+             row.member = tmp_val;
+         }
+         update_plan($data,CallBack);
+     }
 }
 function TypeFormatter(value, row, index){
     tmp_str ="";
@@ -245,7 +501,7 @@ function StateFormatter(value, row, index){
     tmp_str ="";
     switch (value) {
         case "A":
-            tmp_str = "草稿"
+			tmp_str='<select class ="statech" onchange="statechange(this.options[this.options.selectedIndex].value,'+row.NO+')" class="form-control"><option value="A">草稿</option> <option value="B">公開</option></select>'
             break;
         case "B":
             tmp_str = "公開"
@@ -258,14 +514,77 @@ function StateFormatter(value, row, index){
         return tmp_str;
 }
 
+function schFormatter(value, row, index){
+    tmp_str ="";
+	if (row.state2 == 'D')
+	{
+		return [
+        '<select name="state2" onchange="schchange(this.options[this.options.selectedIndex].value,'+row.NO+')" class="form-control"><option value="D">進行中</option> <option value="P">暫緩</option><option value="E">完成</option></select>'
+    ].join('');
+	}
+	else
+	{
+		switch (row.state2) {
+
+			case "P":
+				tmp_str = "暫緩"
+				break;
+			case "E":
+				tmp_str = "完成"
+				break;
+			default:           
+				break;
+		}
+        return tmp_str;
+	}
+
+}
+function schchange(sch,no)
+{
+	var sch_tmp = sch
+	var tmp_str=''
+	
+
+	console.log(no)
+	switch(sch_tmp){
+		case "P":
+			var stn_data = {
+			"state2":"P",
+			"NO":no
+			}
+			console.log(no)
+
+			update_plan(stn_data);
+			break;
+		case "E":
+			var stn_data = {
+				"state2":"E",
+				"NO":no
+			}
+			update_plan(stn_data);
+			break;
+		default:           
+			break;
+	}
+    
+}
+    
 function rowStyle(row, index)
 {
-  if ((index+1) % 5 == 0 ) {
-      return {
-          classes: "line_5_style"
-      };
-  }
-  return {};
+    var style_obj = new Object();
+    var todayDate = new Date();
+    var tmp_str = "";
+    if(DateDiff(row.date,todayDate)>=-1 && row.state2 == "D") 
+    {
+        tmp_str += "deadline-font ";
+        //style_obj.css = "font-color:red;";
+    }
+    if ((index+1) % 5 == 0 ) {
+        tmp_str += "line_5_style ";
+    }
+    style_obj.classes = tmp_str;
+  return style_obj;
+
 }
 
 var replaceWith = $('<input id="temp_name_input" name="temp" style="width:80%" />');
@@ -273,10 +592,23 @@ var save_ok_With = $('<a class="glyphicon glyphicon-ok musPick name_save_ok"  ar
 var remove_With = $('<a class="glyphicon glyphicon-remove musPick name_cancel"  aria-hidden="true"></a>');
 var connectWith = $('input[name="hiddenField"]');
 function work_contentFormatter(value, row, index){
-    return [
-        '<div data-field="work_content" class="casenoEdit musPick">'+row.work_content+'</div>'
-    ].join('');
+    <?php if($this->session->userdata('case_number')["class"] == 1 || $this->session->userdata('case_number')["class"] == 2) {?>
+        return [
+            '<div data-field="remark" class="casenoEdit musPick">'+row.remark+'</div>'
+        ].join('');
+    <?php }else { ?>
+    if(row.state == "A")
+    {
+        return [
+            '<div data-field="remark" class="casenoEdit musPick">'+row.remark+'</div>'
+        ].join('');
+    }else{
+        return row.remark;
+    }
+    <?php } ?>
+
 }
+
 
 
 window.work_contentEvents = {
@@ -291,41 +623,34 @@ window.work_contentEvents = {
         }
 
         this.set_logbook_head = function ($data){
-            $.ajax({
-                url:base_url+"logbook_head/edit_head",
-                type:"POST",
-                dataType:"JSON",
-                data:$data,
-                success:function(){
-                    alert("OK");
-                    elem.text(replaceWith.val());
-                    if($data.sort_no)
-                    {
-                        row.sort_no = replaceWith.val();
-                    }else if($data.work_content)
-                    {
-                        row.work_content = replaceWith.val();
+            function set_logbook_plan()
+            {
+                alert("OK");
+                elem.text(replaceWith.val());
+                if($data.sort_no)
+                {
+                    row.sort_no = replaceWith.val();
+                }else if($data.work_content)
+                {
+                    row.work_content = replaceWith.val();
 
-                    }
-                },
-                error:function(){
-                    alert("error");
                 }
+            }
+            if(elem.attr("data-field") == "remark")
+            {
+                $data = {"NO":  row.NO,
+                            "remark" : replaceWith.val()
+                        }    
 
-            })
+            }
+            update_plan($data,set_logbook_plan)
         }
 
         this.enter_input = function(event){
-            if(elem.attr("data-field") == "work_content")
+            if(elem.attr("data-field") == "remark")
             {
-                $data = {"uid":  row.uid,
-                            "work_content" : replaceWith.val()
-                        }    
-
-            }else if(elem.attr("data-field") == "sort_no")
-            {
-                $data = {"uid":  row.uid,
-                            "sort_no" : replaceWith.val()
+                $data = {"NO":  row.NO,
+                            "remark" : replaceWith.val()
                         }    
                 
             }
@@ -474,7 +799,7 @@ $(document).ready(function(){
         type: "get",
         success: function (data) {
             var str = "";
-            str = '<select class="form-control today_content"  name="today_content"  >';
+            str = '<select class="form-control today_content"  name="today_content">';
             for(var key in data)
             {
                 str += '<option value="'+data[key].work_content+'">'+data[key].work_content+'</option>'
@@ -484,6 +809,25 @@ $(document).ready(function(){
         }
     })
     $("#title_edit_menu .work_plan a").css("color","red");
+    var calset_today={
+        "dow":['日','一','二','三','四','五','六'],
+        "tbBgColor":"91FEFF",
+        "months":["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],
+        "element_type":"input",
+		"click_over":function(){
+			var elm = this.formname;
+            var tmp_str = elm.val();
+            var dt = new Date();
+			if(DateDiff(elm.val(),dt) > 0){
+				alert('請輸入今天以後的日期');
+                elm.val("");
+			}
+				
+		}
+    };
+    $("#today_leng").calDate(calset_today);
+
+
 });
 
 </script>

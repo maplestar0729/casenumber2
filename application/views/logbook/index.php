@@ -194,7 +194,7 @@
   <div id="history_logbook">
       <div id="toolbar" class="list-inline">
       </div>
-      <table id="logbook_tab"
+      <table id="history_logbook_tab"
                 data-toggle="table"
                 data-toolbar="#toolbar"
                 data-search="true"
@@ -242,6 +242,25 @@ function set_content(type,elem)
 {
     $(elem).html(work_str_list[type]);
 }
+$(document).on('click','.pl_t',function(){
+	
+	if($(this).html()=="工作計畫")
+	{
+		$("#logbook_tab").toggle();
+
+	}
+	else if ($(this).html()=="今天日誌")
+	{
+		$("#today_logbook").toggle();
+
+	}
+	else
+	{
+		$("#history_logbook_tab").toggle();
+
+	}
+	
+});
 $(document).on("change",".today_state",function(){
 	var tmp_val = $(this).val();
 	switch (tmp_val) {

@@ -74,6 +74,10 @@ class work extends MY_Controller{
         $search_data = "";
         if($get_data["en"] != "all" && $get_data["en"] != "")
           $search_data["member"] = $get_data["en"];
+		if($this->session->userdata('case_number')["class"] == 2)
+		{
+			$search_data["member != "] = "F";
+		}
         if($get_data["start_date"])
         {
           $search_data["start_date"] = $get_data["start_date"];

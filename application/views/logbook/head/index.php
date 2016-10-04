@@ -13,6 +13,13 @@
 	.line_5_style{
         background-color:#CEFFCE;
     }
+	.casenoEdit{
+		width:100%;
+		height:20px;
+	}
+	.casenoEdit:hover{
+		background-color:#FFEE99;
+	}
 </style>
 
 <div>

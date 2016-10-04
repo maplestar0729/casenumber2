@@ -26,7 +26,7 @@ class head extends MY_Controller{
 		{
 			unset($post_data["uid"]);
 			$post_data["t_create_id"] = $this->session->userdata('case_number')["user_id"];
-			$post_data["type"] = "A";
+			//$post_data["type"] = "A";
 			$rtn = $this->logbook_head_model->creat_head($post_data);
 			redirect(base_url('logbook_head/index/'.$post_data["type"]));
 		}else{

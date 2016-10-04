@@ -103,6 +103,7 @@
            		<th data-field='edit' data-width='10' data-visible="false" data-formatter="editFormatter" data-events="editEvents">編</th>
            		<th data-field='caseno' data-width='50' data-cell-style="NOStyle" data-sortable="true" data-filter-control="true" >NO</th>
            		<th data-field='name' data-width='350'  data-formatter="nameFormatter" data-events="nameEvents"  data-sortable="true" data-filter-control="true" data-editable="true"  >案件名稱</th>
+			    <th data-field='note' data-width='100'  data-formatter="NoteFormatter" data-events="nameEvents"  data-sortable="true" data-filter-control="true" data-editable="true"  >結案否</th>
         <?php
 			for($i=0; $title_sort[$i]['title_name'] != ""; $i++)
 			{
@@ -111,12 +112,15 @@
 
 			}
 			?>
+
             </tr>
+
         </thead>
         <tfoot>
 	        <tr>
            		<th >NO</th>
            		<th >案件名稱</th>
+			<th>NOTE</th>
               <?php
           			for($i=0; $title_sort[$i]['title_name'] != ""; $i++)
           			{
@@ -375,8 +379,16 @@ function footerFormatter(value, row, index,a,b)  {
 }
 
 function nameFormatter(value, row, index){
+	
     return [
         '<div class="casenoEdit musPick">'+row.name+'</div>'
+    ].join('');
+}
+
+function NoteFormatter(value, row, index){
+	
+    return [
+        '<div id="Note" class="casenoEdit musPick">'+row.Note+'</div>'
     ].join('');
 }
 
@@ -387,6 +399,7 @@ function nameStyle(value, row, index) {
 }
 
 function set_caseno_name($data){
+	console.log($data)
     $.ajax({
         url:base_url+"home/update_caseno_data",
         type:"POST",
@@ -414,18 +427,32 @@ window.nameEvents = {
             remove_With.remove();
             elem.show();
         }
-
+		var id = this.id;
+		
         this.enter_input = function(event){
-            $data = {"id": row.id,
-             "set_data" : {
+			if (id == ''){
+				$data = {"id": row.id,
+						"set_data" : {
                         "name" : replaceWith.val()
                         },
-             "tab_name" : remove_With.parent().parent().parent().parent().attr("data-tab-name")
-            }
-            set_caseno_name($data);
-            if (replaceWith.val() != "") {
-                elem.text(replaceWith.val());
-            }
+					"tab_name" : remove_With.parent().parent().parent().parent().attr("data-tab-name")
+				}
+				set_caseno_name($data);
+			}
+			else{
+				$data = {"id": row.id,
+						"set_data" : {
+                        "Note" : replaceWith.val()
+                        },
+					"tab_name" : remove_With.parent().parent().parent().parent().attr("data-tab-name")
+	
+				}
+				set_caseno_name($data);
+			}
+				
+
+            elem.text(replaceWith.val());
+            
 
             temp_esc_input();
         }
@@ -793,7 +820,7 @@ $(document).ready(function(e) {
     }
     if($("#year_data_tab th").length > 2)
     {
-        nowWidth = 50+350;
+        nowWidth = 50+700;
         x = $("#year_data_tab thead th").length - 2;
         $("#year_data_tab").width(nowWidth + x * 120);
     }

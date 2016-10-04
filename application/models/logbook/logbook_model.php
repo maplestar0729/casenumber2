@@ -41,6 +41,10 @@ class logbook_model extends CI_Model{
 		{
 				$where_arr["member"] = $search_data["member"];
 		}
+		if(isset($search_data["member != "]))
+		{
+				$where_arr["member != "] = $search_data["member != "];
+		}
 		if(isset($search_data["start_date"]))
 		{
 				$where_arr["logbook_log.date >="] = $search_data["start_date"];
@@ -49,6 +53,7 @@ class logbook_model extends CI_Model{
 		{
 				$where_arr["logbook_log.date <="] = $search_data["end_date"];
 		}
+		//echo json_encode($where_arr);
 		try
 		{
 			//echo json_encode($where_arr);

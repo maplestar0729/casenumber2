@@ -15,11 +15,11 @@ class logbook_plan_model extends CI_Model{
 		}
 		return $ans;
 	}
-	public function get_plan_list($search_data){
+	public function get_plan_list($search_data,$num){
 
 		
 		
-		$where_arr["member"] = $search_data["member"];
+		
 		// if(isset($search_data["start_date"]))
 		// {
 		// 		$where_arr["logbook_plan.date >="] = $search_data["start_date"];
@@ -30,7 +30,41 @@ class logbook_plan_model extends CI_Model{
 		// }
 		try
 		{
-			//echo json_encode($where_arr);
+			if($num=='3')
+			{
+					//echo json_encode($where_arr);
+		// echo json_encode(where_arr);
+				$this->db->select("logbook_plan.*,caseindex_caseno.name,(member.name) member_name")
+						->from("logbook_plan")
+						->join("caseindex_caseno","caseindex_caseno.caseno = logbook_plan.caseno","left")
+						->join("member","member.en = logbook_plan.member","left")
+						->order_by("logbook_plan.date desc,NO desc");
+				// if(isset($where_arr))
+				// {
+				// 	$this->db->where($where_arr);
+					
+				// }
+				$where_str["state"] = "D";
+				$this->db->where($where_str);
+				$ans = $this->db->get()->result_array();
+				//echo $ans;
+			}
+			else if($num == '2')
+			{
+			$this->db->select("logbook_plan.*,caseindex_caseno.name,(member.name) member_name")
+				->from("logbook_plan")
+				->join("caseindex_caseno","caseindex_caseno.caseno = logbook_plan.caseno","left")
+				->join("member","member.en = logbook_plan.member","left")
+				->order_by("logbook_plan.date desc,NO desc");
+
+			$where_str = "state2 = \"E\"  or state2 = \"P\"";
+			$this->db->where($where_str);
+			$ans = $this->db->get()->result_array();
+			//echo $ans;
+			}else
+			{
+				$where_arr["member"] = $search_data["member"];
+				//echo json_encode($where_arr);
 // echo json_encode(where_arr);
   		$this->db->select("logbook_plan.*,caseindex_caseno.name,(member.name) member_name")
 				->from("logbook_plan")
@@ -42,10 +76,12 @@ class logbook_plan_model extends CI_Model{
 			// 	$this->db->where($where_arr);
 				
 			// }
-			$where_str = "(state = \"B\" or member = '".$where_arr["member"]."' ) and state != \"D\"";
+			$where_str = "(state = \"B\" or CreateID = '".$where_arr["member"]."' ) and state != \"D\" and state2 = \"D\" ";
 			$this->db->where($where_str);
 			$ans = $this->db->get()->result_array();
 			//echo $ans;
+			}
+		
 		} catch (Exception $e){
 			$ans = false;
 		}
@@ -55,6 +91,8 @@ class logbook_plan_model extends CI_Model{
 	public function update_plan($data){
 		try
 		{
+			// echo json_encode($data);
+			$data["t_ModifyDate	"] = date("Y-m-d H:m:s");
 			$ans = $this->db->where('NO',$data["NO"])->update("logbook_plan", $data);
 		}catch (Exception $e){
 			$ans = false;

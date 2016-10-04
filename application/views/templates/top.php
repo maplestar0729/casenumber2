@@ -17,8 +17,14 @@
 	}
 </style>
 	<header id="header" class="navbar navbar-static-top">
+	
 		<div class="navbar-header">
-			<?php if($this->session->userdata('case_number')["class"] == 1){ ?>
+			<span  class="navbar-brand">
+			<?php
+	            echo (date("Y") - 1911).date("/m/d");
+	        ?>
+			</span>
+			<?php if($this->session->userdata('case_number')["class"] != 3){ ?>
 			<a href="<?=base_url('home');?>" class="navbar-brand casenumber">案件編號</a>
 			<?php }?>
 			<a href="<?=base_url('logbook/index');?>" class="navbar-brand logbook">工作日誌</a>
