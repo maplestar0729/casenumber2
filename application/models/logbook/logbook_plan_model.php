@@ -4,7 +4,7 @@ class logbook_plan_model extends CI_Model{
 
 
 
-	public function creat_plan($data){
+	public function create_plan($data){
 
 		try
 		{
@@ -17,7 +17,7 @@ class logbook_plan_model extends CI_Model{
 	}
 	public function get_plan_list($search_data,$num){
 
-		
+
 		
 		
 		// if(isset($search_data["start_date"]))
@@ -57,7 +57,9 @@ class logbook_plan_model extends CI_Model{
 				->join("member","member.en = logbook_plan.member","left")
 				->order_by("logbook_plan.date desc,NO desc");
 
-			$where_str = "state2 = \"E\"  or state2 = \"P\"";
+			// $where_str = "logbook_plan.date < \"".(date("Y")-1911) ."/".date("m/d")."\" and state2 != \"D\"";
+			$where_str = "state2 != \"D\" and state != \"D\" and state2 !=\"F\"";
+			
 			$this->db->where($where_str);
 			$ans = $this->db->get()->result_array();
 			//echo $ans;
@@ -76,10 +78,14 @@ class logbook_plan_model extends CI_Model{
 			// 	$this->db->where($where_arr);
 				
 			// }
-			$where_str = "(state = \"B\" or CreateID = '".$where_arr["member"]."' ) and state != \"D\" and state2 = \"D\" ";
+			// $where_str = "(state = \"B\" or CreateID = '".$where_arr["member"]."')and state != \"D\" and  state2 = \"D\" and (logbook_plan.date >= \"".(date("Y")-1911) ."/".date("m/d")."\" or logbook_plan.date =\"\")";
+			// $where_str = "(state = \"B\" or CreateID = '".$where_arr["member"]."')and state != \"D\" and  state2 = \"D\"";
+			$where_str = "state != \"D\" and (state2 = \"D\" or state2= \"F\")";
+			
 			$this->db->where($where_str);
 			$ans = $this->db->get()->result_array();
 			//echo $ans;
+			
 			}
 		
 		} catch (Exception $e){
@@ -101,11 +107,10 @@ class logbook_plan_model extends CI_Model{
 
 		
 	}
-	public function get_LogbookPage_plan__list($search_data){
+	public function get_LogbookPage_plan__list(){
 
 		
 		
-		$where_arr["member"] = $search_data["member"];
 		// if(isset($search_data["start_date"]))
 		// {
 		// 		$where_arr["logbook_plan.date >="] = $search_data["start_date"];
@@ -128,7 +133,7 @@ class logbook_plan_model extends CI_Model{
 			// 	$this->db->where($where_arr);
 				
 			// }
-			$where_str = "member = '".$where_arr["member"]."' and state != \"D\"";
+			$where_str = "state = \"B\" and (state2 = \"D\" or state2= \"F\")";
 			$this->db->where($where_str);
 			$ans = $this->db->get()->result_array();
 			//echo $ans;

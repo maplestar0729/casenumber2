@@ -47,7 +47,7 @@
            		<th data-field='id' data-width='50'	data-visible="false">id</th>
            		<th data-field='edit' data-width='30' data-visible="false" data-formatter="editFormatter" data-events="editEvents">編輯</th>
            		<th data-field='caseno' data-width='20' data-sortable="true" data-filter-control="true">案件編號</th>
-           		<th data-field='name' data-width='50'  data-formatter="nameFormatter" data-events="nameEvents"  data-sortable="true" data-filter-control="true" data-editable="true"  >案件名稱</th>
+           		<th data-field='name' data-width='50'  data-formatter="nameFormatter" data-events="nameEvents"   >案件名稱</th>
         <?php
 			for($i=0; $title_sort[$i]['title_name'] != ""; $i++)
 			{
@@ -89,7 +89,7 @@
                 <tr>
                     <th data-field='id' data-width='50'	data-visible="false">id</th>
                     <th data-field='year' data-width='20' data-sortable="true" data-filter-control="true">年</th>
-                    <th data-field='name' data-width='50'  data-formatter="nameFormatter" data-events="nameEvents"  data-sortable="true" data-filter-control="true" data-editable="true"  >案件名稱</th>
+                    <th data-field='name' data-width='50'  data-formatter="nameFormatter" data-events="nameEvents"   >案件名稱</th>
                     <th data-field='edit' data-width='30' data-formatter="undecidedEditFormatter" data-events="undecidedEditEvents">編輯</th>
 
                 </tr>

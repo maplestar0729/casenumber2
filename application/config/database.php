@@ -48,10 +48,10 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
-$db['default']['password'] = '1234';
-$db['default']['database'] = 'www_casenumber';
+$db['default']['hostname'] = '127.0.0.1';
+$db['default']['username'] = 'a11558866';
+$db['default']['password'] = '@WEBwenyc2053';
+$db['default']['database'] = 'a11558866_casenumber';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;

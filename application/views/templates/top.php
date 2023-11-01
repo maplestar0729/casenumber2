@@ -24,10 +24,14 @@
 	            echo (date("Y") - 1911).date("/m/d");
 	        ?>
 			</span>
-			<?php if($this->session->userdata('case_number')["class"] != 3){ ?>
 			<a href="<?=base_url('home');?>" class="navbar-brand casenumber">案件編號</a>
-			<?php }?>
 			<a href="<?=base_url('logbook/index');?>" class="navbar-brand logbook">工作日誌</a>
+			<a href="<?=base_url('logbook_plan/index');?>" class="navbar-brand logbook_plan">工作計畫</a>
+    <?php if($this->session->userdata('case_number')["class"] < 3) {?>
+			<a href="<?=base_url('casenumber');?>" class="navbar-brand">案件收支明細</a>
+	<?php } ?>
+			<a href="<?=base_url('phoneBook');?>" class="navbar-brand phoneBook">電話簿</a>
+    
 		</div>
 		<ul class="nav pull-right">
 			<li><a><span class="user_name hidden-xs hidden-sm hidden-md"><?=$user_name?>您好</span><i class="fa fa-sign-out fa-lg"></i></a></li>

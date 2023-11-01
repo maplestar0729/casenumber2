@@ -59,15 +59,15 @@
 
               <tr>
                   <th data-field='NO' data-width='10'	data-visible="false" >id</th>
-                  <th data-field='date' data-width='100'  data-sortable="true" data-filter-control="true" data-editable="true"  >日期</th>
-				  <th data-field='member' data-width='80' data-formatter="MemberFormatter"  data-sortable="true" data-filter-control="true" data-editable="true"  >成員</th>
-                  <th data-field='type' data-width='110' data-formatter="TypeFormatter"  data-sortable="true" data-filter-control="true" data-editable="true"  >工作類型</th>
-                  <th data-field='state' data-width='110' data-formatter="StateFormatter"  data-sortable="true" data-filter-control="true" data-editable="true"  >工作類型</th>
+                  <th data-field='date' data-width='100'   >日期</th>
+				  <th data-field='member' data-width='80' data-formatter="MemberFormatter"   >成員</th>
+                  <th data-field='type' data-width='110' data-formatter="TypeFormatter"   >工作類型</th>
+                  <th data-field='state' data-width='110' data-formatter="StateFormatter"   >工作類型</th>
                   <th data-field='caseno' data-width='100' data-sortable="true" data-filter-control="true" >案件編號</th>
-                  <th data-field='name' data-width='300'  data-sortable="true" data-filter-control="true" data-editable="true"  >案件名稱</th>
+                  <th data-field='name' data-width='300'   >案件名稱</th>
 
-				  <th data-field='state2' data-formatter="schFormatter_END" data-width='300'  data-sortable="true" data-filter-control="true" data-editable="true"  >進度</th>
-                  <th data-field='Other' data-formatter="OtherFormatter_END" data-events="OtherEvents" data-width='50'  data-sortable="true" data-filter-control="true" data-editable="true"  >重新啟動</th>
+				  <th data-field='state2' data-formatter="schFormatter_END" data-width='300'   >進度</th>
+                  <th data-field='Other' data-formatter="OtherFormatter_END" data-events="OtherEvents" data-width='50'   >重新啟動</th>
 
 				</tr>
             </thead>

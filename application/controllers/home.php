@@ -86,8 +86,11 @@ class home extends MY_Controller{
   {
     $data_post = $this->input->post(NULL, TRUE);
   }
-
-
+/*
+	public function get_case_year_list(){
+		
+	}
+  */
 	public function update_caseno_data(){
 		$data_post = $this->input->post(NULL, TRUE);
     //echo json_encode($data_post);

@@ -17,6 +17,13 @@ class case_index_model extends CI_Model{
 			return 1;  
 	}
 	
-
+/*
+	public function get_case_year_list(){  
+		
+		$this->db->select('year')
+			 ->from('caseindex_title_edit')->order_by("caseindex_title_edit.sort", "ASC");
+		
+		return $this->db->get()->result_array();  
+	}*/
 }
 ?>

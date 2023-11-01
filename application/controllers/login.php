@@ -22,7 +22,7 @@ class Login extends MY_Controller{
 
   	//登入檢查
   	public function login_check(){
-  		if( $this->session->userdata('case_number')["logged_in"] ){		//已登入
+  		if( $this->session->userdata('case_number')["logged_in"] ){			//已登入
               redirect( base_url('logbook/index') );
           }else{
   			//驗證碼驗證
@@ -42,7 +42,7 @@ class Login extends MY_Controller{
                   $session_data["case_number"]["user_id"] = $user[0]['id'];
                   $session_data["case_number"]["class"] = $user[0]['clas'];
                   $session_data["case_number"]["logged_in"] = true;
-  				        $this->session->set_userdata($session_data);
+  				  $this->session->set_userdata($session_data);
                   redirect( base_url('login') );
               }
           }

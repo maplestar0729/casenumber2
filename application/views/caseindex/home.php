@@ -15,6 +15,14 @@
     background-color: #CCDDFF;
 
 }
+.lv3_caseno{
+	width: 99%;
+	font-family:標楷體;
+	font-size:20px;
+	color:blue;
+    min-height:25px ;
+    height:auto;
+}
 .chk{
   color: #666666;
   font-size: 20px;
@@ -54,7 +62,11 @@
     <div id="toolbar" class="list-inline">
         <ul class="list-inline">
         <?php if(isset($year)){?>
+		<?php if($this->session->userdata["case_number"]["class"] != 3) {?>
+
     	<li><a href="#addModal" data-toggle="modal"><button id="new" type="button" class="btn btn-mystyle">新增</button></a></li>
+		<?php } ?>
+
         <li class="tab-title"><?=$year?>年案件編號表</li>
         <?php } else{?>
             <li>
@@ -99,14 +111,25 @@
         <thead>
 
 	        <tr>
+			<?php if($this->session->userdata('case_number')["class"] != 3) {?>
+
            		<th data-field='id' data-width='10' data-sortable="true" data-visible="false" >id</th>
            		<th data-field='edit' data-width='10' data-visible="false" data-formatter="editFormatter" data-events="editEvents">編</th>
            		<th data-field='caseno' data-width='50' data-cell-style="NOStyle" data-sortable="true" data-filter-control="true" >NO</th>
-           		<th data-field='name' data-width='350'  data-formatter="nameFormatter" data-events="nameEvents"  data-sortable="true" data-filter-control="true" data-editable="true"  >案件名稱</th>
-			    <th data-field='note' data-width='100'  data-formatter="NoteFormatter" data-events="nameEvents"  data-sortable="true" data-filter-control="true" data-editable="true"  >結案否</th>
+           		<th data-field='name' data-width='350'  data-formatter="nameFormatter" data-events="nameEvents"   >案件名稱</th>
+			    <th data-field='note' data-width='100'  data-formatter="NoteFormatter" data-events="nameEvents"   >結案否</th>
+			<?php }else{ ?>
+			<th data-field='id' data-width='10' data-sortable="true" data-visible="false" >id</th>
+           		<th data-field='caseno' data-width='50' data-cell-style="NOStyle" data-sortable="true" data-filter-control="true" >NO</th>
+           		<th data-field='name' data-width='350' data-formatter="nameFormatter">案件名稱</th>
+			    <th data-field='note' data-width='100' data-formatter="NoteFormatter">結案否</th>
+			<?php } ?>
+
+
         <?php
 			for($i=0; $title_sort[$i]['title_name'] != ""; $i++)
 			{
+
 			    //echo "<th data-field='title".($title_sort[$i]['id']+1)."_state' data-cell-style='statusStyle'  data-width='5'></th>";
 			    echo "<th data-field='title".($title_sort[$i]['id']+1)."' data-formatter='statusFormatter' data-events='statusEvents' data-width='120'>".$title_sort[$i]['title_name']."</th>";
 
@@ -119,8 +142,9 @@
         <tfoot>
 	        <tr>
            		<th >NO</th>
-           		<th >案件名稱</th>
-			<th>NOTE</th>
+				<th>案件名稱</th>
+				<th>結案否</th>
+
               <?php
           			for($i=0; $title_sort[$i]['title_name'] != ""; $i++)
           			{
@@ -134,6 +158,8 @@
       </table>
 
 </div>
+<?php if($this->session->userdata["case_number"]["class"] != 3) {?>
+
 <div>
 
 
@@ -149,6 +175,7 @@
                     <?php }?>
                     </ul>
                 </div>
+				
                 <div >
             <table id="year_undecided"
                     data-toggle="table"
@@ -174,7 +201,7 @@
                     <tr>
                         <th data-field='id' data-width='50'	data-visible="false" data-sortable="true">id</th>
                         <th data-field='year' data-width='50' data-cell-style="NOStyle" data-sortable="true" data-filter-control="true">年</th>
-                        <th data-field='name' data-width='350'  data-formatter="nameFormatter" data-events="nameEvents"  data-sortable="true" data-filter-control="true" data-editable="true"  >案件名稱</th>
+                        <th data-field='name' data-width='350'  data-formatter="nameFormatter" data-events="nameEvents"   >案件名稱</th>
                         <th data-field='edit' data-width='50' data-formatter="undecidedEditFormatter" data-events="undecidedEditEvents">給編號</th>
                         <th data-field='del' data-width='50' data-formatter="undecidedDelFormatter" data-events="undecidedDelEvents">刪</th>
 
@@ -197,7 +224,7 @@
     						<div class="form-group col-sm-12" >
     							<label class="col-md-3 control-label">案件編號</label>
     							<ul class="list-inline">
-                                    <li ><input  type="text" class="form-control" name="case_code_en" id="case_code_en" maxlength="1" size="1" style="width:35px"  required="required" ></li>
+                                    <li ><input  type="text" class="form-control" name="case_code_en" id="case_code_en" maxlength="1" size="1" style="width:40px"  required="required" ></li>
     								<li ><select type="text" class="form-control case_modal_year" name="case_code_year" id="case_code_year"  style="width:70px"/>
                                     </select></li>
     								<li ><input type="text" class="form-control"  name="case_code_n" id="case_code_n" maxlength="2" size="2" style="width:70px"  required="required" ></li>
@@ -233,7 +260,9 @@
     			</div>
     		</div>
     	</div>
-      <div class="modal fade " id="addModal_undecided" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" data-keyboard="false" aria-hidden="true">
+<?php } ?>
+      
+	  <div class="modal fade " id="addModal_undecided" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" data-keyboard="false" aria-hidden="true">
     		<div class="modal-dialog">
     			<div class="modal-content">
     				<div class="modal-header">
@@ -380,15 +409,25 @@ function footerFormatter(value, row, index,a,b)  {
 
 function nameFormatter(value, row, index){
 	
+	<?php if($this->session->userdata('case_number')["class"] != 3) {?>
+		rtn_str = '<div data-val-name="name" class="casenoEdit musPick">'+row.name+'</div>'
+	<?php } else {?>
+		rtn_str = '<div class="lv3_caseno">'+row.name+'</div>'
+	<?php } ?>
     return [
-        '<div class="casenoEdit musPick">'+row.name+'</div>'
+        rtn_str
     ].join('');
 }
 
 function NoteFormatter(value, row, index){
 	
+	<?php if($this->session->userdata('case_number')["class"] != 3) {?>
+		rtn_str = '<div  data-val-name="Note"class="casenoEdit musPick">'+row.Note+'</div>'
+	<?php } else {?>
+		rtn_str = '<div class="lv3_caseno">'+row.Note+'</div>'
+	<?php } ?>
     return [
-        '<div id="Note" class="casenoEdit musPick">'+row.Note+'</div>'
+        rtn_str
     ].join('');
 }
 
@@ -427,29 +466,32 @@ window.nameEvents = {
             remove_With.remove();
             elem.show();
         }
-		var id = this.id;
+        var id = $(this).attr("data-val-name");
 		
         this.enter_input = function(event){
-			if (id == ''){
-				$data = {"id": row.id,
-						"set_data" : {
-                        "name" : replaceWith.val()
-                        },
-					"tab_name" : remove_With.parent().parent().parent().parent().attr("data-tab-name")
-				}
-				set_caseno_name($data);
-			}
-			else{
-				$data = {"id": row.id,
-						"set_data" : {
-                        "Note" : replaceWith.val()
-                        },
-					"tab_name" : remove_With.parent().parent().parent().parent().attr("data-tab-name")
-	
-				}
-				set_caseno_name($data);
-			}
+            switch(id)
+            {
+                case "name":
+                    $data = {"id": row.id,
+                            "set_data" : {
+                                    "name" : replaceWith.val()
+                                    },
+                                "tab_name" : remove_With.parent().parent().parent().parent().attr("data-tab-name")
+                            }
+                    break;
+                case "Note":
+                    $data = {"id": row.id,
+                            "set_data" : {
+                            "Note" : replaceWith.val()
+                            },
+                        "tab_name" : remove_With.parent().parent().parent().parent().attr("data-tab-name")
+        
+                    }
+                    break;
+            }
 				
+            set_caseno_name($data);
+
 
             elem.text(replaceWith.val());
             
@@ -551,16 +593,25 @@ function get_date_html_str(data)
 	}
 	return tmp_str;
 }
+
 function statusFormatter(value, row, index) {
+
     //debugger;
+	
 	tmp_data = new Object();
     tmp_data.status = row[this.field + "_state" ];
 	tmp_data.id = row.id;
 	tmp_data.title = this.field;
 	tmp_data.date = value;
+
 	sCode = get_date_html_str(tmp_data);
+	
     return [sCode].join('');
+
 }
+
+<?php if($this->session->userdata["case_number"]["class"] != 3){?>
+
 var calset={
         "dow":['日','一','二','三','四','五','六'],
         "tbBgColor":"91FEFF",
@@ -589,6 +640,8 @@ var calset={
 
         }
     };
+<?php }?>
+
 moncalendar = 0;
 $(document).on("click",".row_date", function(e){
     e.stopPropagation();
@@ -616,6 +669,8 @@ function update_status(data,tab_element){
 
     });
 }
+<?php if($this->session->userdata["case_number"]["class"] != 3){?>
+
 $(document).on("click",".chk",function (e) {
 	if($(this).attr("data-status") == 0)
 	{
@@ -640,6 +695,7 @@ $(document).on("click",".chk",function (e) {
     }
     update_status(data,$(this).parent().parent().parent());
 });
+
 $(document).on("click",".ban", function (e, value, row, index) {
     val_name = $(this).attr("data-title");
     id = $(this).attr("data-title-id");
@@ -652,6 +708,8 @@ $(document).on("click",".ban", function (e, value, row, index) {
     }
     update_status(data,$(this).parent().parent().parent());
 });
+<?php }?>
+
 $(document).on("dblclick",".row_date",function (e){
     var temp_row_date = $(this);
     var data = new Object();
@@ -767,7 +825,7 @@ $(document).ready(function(e) {
 	}
 
 
-	for(i = d.getFullYear()-1911 ; i >= start_year; i-- )
+	for(i = d.getFullYear()-1911 + 1  ; i >= start_year; i-- )
 	{
 		$(".case_modal_year").append($("<option></option>").attr("value", i).text( (i >=100)? padLeft(i-100,2) : i));
 	}

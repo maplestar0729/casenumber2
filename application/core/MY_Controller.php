@@ -46,7 +46,28 @@ class MY_Controller extends CI_Controller {
 
 	}
 
+	//顯示template
+	public function logbook_plan_template($page_name, $data=[])
+	{
+		//登入的session
+		if($this->session->userdata('case_number')["logged_in"])
+		{
+			$data['user_name']=$this->session->userdata('case_number')["user_name"];
+			$data['user_class']=$this->session->userdata('case_number')["class"];
 
+			//echo json_encode($this->session->userdata('case_number'));
+			 $data['leftmenu'] = $this->load->view('logbook_plan/templates/leftmenu', $data, TRUE);
+			$data['top'] = $this->load->view('templates/top', $data, TRUE);
+			$data['body'] = $this->load->view($page_name, $data, TRUE);
+			$this->load->view('logbook_plan/templates/layout', $data);
+		}
+		else
+		{
+			redirect(base_url('login'));
+		}
+
+
+	}
 	//取得使用者IP
 	public function get_ip(){
         static $realIP;

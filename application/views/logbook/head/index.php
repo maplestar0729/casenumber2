@@ -75,8 +75,8 @@
 
             <tr>
                 <th data-field='uid' data-width='10'	data-visible="false" >id</th>
-                <th data-field='sort_no' data-formatter="sortFormatter" data-events="work_contentEvents" data-width='50'    data-sortable="true" data-filter-control="true" data-editable="true"  >排序</th>
-                <th data-field='work_content' data-formatter="work_contentFormatter" data-events="work_contentEvents"  data-width='400' data-sortable="true" data-filter-control="true" data-editable="true"  >內容</th>
+                <th data-field='sort_no' data-formatter="sortFormatter" data-events="work_contentEvents" data-width='50'     >排序</th>
+                <th data-field='work_content' data-formatter="work_contentFormatter" data-events="work_contentEvents"  data-width='400'  >內容</th>
             </tr>
         </thead>
     </table>

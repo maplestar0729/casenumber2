@@ -8,7 +8,11 @@
 				 </li>
 			 </ul>
         	<ul class="menu">
+			<?php if($this->session->userdata["case_number"]["class"] != 3) {?>
+
             	<li><a href="<?=base_url('title_edit');?>">編輯-進度點</a></li>
+			<?php } ?>
+
 
             </ul>
         		<ul id="year_menu"  class="menu">

@@ -22,7 +22,8 @@
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = '';
+$config['base_url'] = 'http://casenumber.maple-area.com/';
+// $config['base_url'] = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -366,5 +367,10 @@ $config['rewrite_short_tags'] = FALSE;
 $config['proxy_ips'] = '';
 
 
+ spl_autoload_register(function ($class) {
+    if(strpos($class, 'CI_') !== 0) {
+        @include_once( APPPATH . 'core/'. $class . EXT );
+    }
+});
 /* End of file config.php */
 /* Location: ./application/config/config.php */

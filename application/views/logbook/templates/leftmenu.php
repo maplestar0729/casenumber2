@@ -23,12 +23,11 @@
             	<li class="work_logbook"><a href="<?=base_url('logbook/index');?>" >工作日誌</a></li>
 
             </ul>
-			<ul class="menu">
+			<!--<ul class="menu">
             	<li class="work_plan"><a href="<?=base_url('logbook_plan/index');?>" >工作計畫</a></li>
-            	<li class="work_plan_E"><a href="<?=base_url('logbook_plan/planend');?>" >工作計畫成果</a></li>
 
 
-            </ul>
+            </ul>-->
 
 			<?php if($this->session->userdata('case_number')["class"] == 1){ ?>
 			<ul class="menu">
